@@ -65,13 +65,14 @@ class Player:
 
     pass
 
-    def make_bet(self, amount):
+     def make_bet(self, decision, amount):
         if (decision == "fold"):
-            #Player gets removed
+            self.clear_hand
         elif (decision == "call"):
-            #Add bet to pot
+            self.pot += amount
         elif (decision == "raise"):
-            #Add raise to bet and pot
+            raise_amount = get_raise_amount(self)
+            self.pot += amount + raise_amount 
 
     def get_raise_amount(self):
         # Implement the logic for the player to decide how much to raise.
