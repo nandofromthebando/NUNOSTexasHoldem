@@ -62,6 +62,17 @@ class Player:
         else:
             print("Invalid input. Please enter 'fold', 'call', or 'raise'.")
 
+    def current_bet(self):
+        while True:
+            bet_input = input("Enter your bet: ")
+            try:
+                curr_bet = float(bet_input)
+                if curr_bet <= 0:
+                    print("Invalid bet amount. Please enter a positive value.")
+                else:
+                    return curr_bet
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
 
 
     def make_bet(self, decision, amount):
@@ -92,6 +103,7 @@ class TexasHoldemGame:
         self.players = []
         self.community_cards = []
         self.pot = 0
+        slef.big_blind = 0
 
     def add_player(self, player):
         self.players.append(player)
