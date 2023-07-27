@@ -61,8 +61,7 @@ class Player:
             return "raise", raise_amount
         else:
             # Invalid input, prompt the player again or handle the error
-            return make_bet_decision(current_bet)
-
+            print("Invalid input. Please enter 'fold', 'call', or 'raise'.")
 
     pass
 
