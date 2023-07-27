@@ -50,7 +50,7 @@ class Player:
 
     def make_bet_decision(self, current_bet):
         decision = get_player_input()
-
+        valid_options = ["fold", "call", "raise"]
         # Check the player's decision and act accordingly
         if (decision == "fold"):
             return "fold"
@@ -60,12 +60,11 @@ class Player:
             raise_amount = get_raise_amount()
             return "raise", raise_amount
         else:
-            # Invalid input, prompt the player again or handle the error
             print("Invalid input. Please enter 'fold', 'call', or 'raise'.")
 
-    pass
 
-     def make_bet(self, decision, amount):
+
+    def make_bet(self, decision, amount):
         if (decision == "fold"):
             self.clear_hand
         elif (decision == "call"):
@@ -74,10 +73,18 @@ class Player:
             raise_amount = get_raise_amount(self)
             self.pot += amount + raise_amount 
 
+
     def get_raise_amount(self):
-        # Implement the logic for the player to decide how much to raise.
-        # Return the raise amount based on user input or a calculated value.
-        pass
+         while True:
+            try:
+                raise_amt = float(input("Enter the amount you would like to raise: "))
+                if raise_amt <= 0:
+                    print("Invalid amount. Please enter a positive value.")
+                else:
+                    return raise_amt
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
+
 
 class TexasHoldemGame:
     def __init__(self):
