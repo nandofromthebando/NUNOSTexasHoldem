@@ -27,6 +27,7 @@ class Player:
         self.name = name
         self.balance = balance
         self.hand = []
+        self.pot = 0
 
     def receive_card(self, card):
         self.hand.append(card)
@@ -96,6 +97,18 @@ class Player:
             except ValueError:
                 print("Invalid input. Please enter a valid number.")
 
+   """ def get_best_hand_ranking(self):
+        for (player in self.players):
+            if (player.hand == A, K, Q, J, 10 & self.suit = self.suit)
+                print("{winner.name} got a Royal Flush")
+                if ((player.hand[0] == player.hand[0]) == ):"""
+
+
+
+
+
+
+
 
 class TexasHoldemGame:
     def __init__(self):
@@ -103,7 +116,7 @@ class TexasHoldemGame:
         self.players = []
         self.community_cards = []
         self.pot = 0
-        slef.big_blind = 0
+        self.big_blind = 0
 
     def add_player(self, player):
         self.players.append(player)
@@ -120,6 +133,19 @@ class TexasHoldemGame:
             card = self.deck.deal()
             if card:
                 self.community_cards.append(card)
+    
+    def all_in_players(self)
+        for(players in self.players):
+            if (player.balance = 0 & player.make_bet_decision != "fold")
+                print (f"{player} is all in")
+
+    def insufficient_funds(self, player, current_bet):
+        if (player.balance < current_bet):
+            print(f"{player.name} doesn't have enough chips, going all in")
+            self.pot += player.balance
+            player.pot += balance
+            player.balance = 0
+
 
     def reset_game(self):
         self.deck = Deck()
@@ -147,6 +173,46 @@ class TexasHoldemGame:
 
         if len(self.players) > 1:
             self.showdown()
+
+    def showdown(self):
+        active_players = [player for player in self.players if not player.folded]
+
+        # If only one player is left or all others are all-in, they automatically win
+        if len(active_players) == 1:
+            winner = active_players[0]
+            winner.balance += self.pot
+            print(f"{winner.name} wins the pot with no showdown!")
+            return
+
+        # Evaluate hands and determine the best hand ranking for each active player
+        player_rankings = {}
+        for player in active_players:
+            player_hand = player.hand + self.community_cards
+            best_ranking = get_best_hand_ranking(player_hand)
+            player_rankings[player] = best_ranking
+
+        # Find the highest hand ranking among the active players
+        highest_ranking = max(player_rankings.values())
+
+        # Find the players with the highest ranking (potential ties)
+        winners = [player for player, ranking in player_rankings.items() if ranking == highest_ranking]
+
+        # Distribute the pot among the winners
+        pot_per_winner = self.pot // len(winners)
+        remaining_chips = self.pot % len(winners)
+
+        for winner in winners:
+            winner.balance += pot_per_winner
+            if remaining_chips > 0:
+                winner.balance += 1
+                remaining_chips -= 1
+
+        print("Showdown results:")
+        for winner in winners:
+            print(f"{winner.name} wins {pot_per_winner} chips.")
+        if remaining_chips > 0:
+            print(f"Remaining {remaining_chips} chips in the pot are not evenly divisible and go to a random winner.")
+
 class Bets:
     def collect_bets(self):
         current_bet = self.big_blind
@@ -178,6 +244,14 @@ class Bets:
                     current_bet += raise_amount
                     last_raiser = player
                     continue
+        # Check if players have enough chips to call or raise
+        for player in players_in_round:
+            if (player.make_bet_decision != "fold"):
+                amount_to_call = current_bet - player.pot
+                self.handle_insufficient_chips(player, amount_to_call)
+
+        # Handle players who are all-in
+        self.handle_all_in_players()
 
 
 
