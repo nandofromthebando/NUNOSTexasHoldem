@@ -188,6 +188,40 @@ class TexasHoldemGame:
             card = self.deck.deal()
             if card:
                 self.community_cards.append(card)
+                
+    def get_game_info(self):
+        return ("Pot: {player.pot}, Hand: {player.hand}, Community Cards: {player.pot}")
+
+    def game_rounds(self):
+        while len(players_in_round) > 1:
+            player = self.players_in_round[self.current_player_index]
+            if (player == last_raiser):
+                print('End of round!')
+                return
+            self.get_game_info(player)
+            bet_choice = self.make_bet_decision(player)
+            if (bet_choice == "fold"):
+                # Handle the player's fold action
+                self.handle_fold_action(player)
+                self.players_in_round.remove(player)
+            elif (bet_choice == "call"):
+                # Handle the player's call action
+                amount_to_call = current_bet - player.pot
+                self.handle_call_action(player, amount_to_call)
+            elif (bet_choice == "raise"):
+                # Handle the player's raise action
+                raise_amount = player.get_raise_amount()
+                self.handle_raise_action(player, current_bet, raise_amount)
+                current_bet += raise_amount
+                self.last_raiser = player
+
+            # Move to the next player's turn
+            self.next_turn()
+
+        # Code outside the loop will be executed after the end of the round
+        self.showdown()
+        self.reset_game()
+
     
     def all_in_players(self):
         for players in self.players:
