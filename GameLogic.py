@@ -14,7 +14,7 @@ class Card:
 
 class Deck:
     def __init__(self):
-        self.cards = [Card(rank, suit) for rank in RANKS for suit in SUITS]
+        self.cards = [Card(rank, suit) for rank in NUMBER for suit in SUITS]
         random.shuffle(self.cards)
 
     def deal(self):
@@ -79,12 +79,14 @@ class Player:
 
     def make_bet(self, decision, amount):
         if (decision == "fold"):
-            self.clear_hand
+            self.clear_hand()
         elif (decision == "call"):
             self.pot += amount
+            self.balance -= amount
         elif (decision == "raise"):
-            raise_amount = get_raise_amount(self)
+            raise_amount = self.get_raise_amount()
             self.pot += amount + raise_amount 
+            self.balance -= (amount + raise_amount)
 
 
     def get_raise_amount(self):
@@ -277,8 +279,8 @@ class TexasHoldemGame:
         self.pot = 0
         self.big_blind = 0
         self.current_player_index = 0  #for turns
-        self.players_in_round = 0
-        self.last_raiser = 0
+        self.players_in_round = []
+        self.last_raiser = None
 
     def next_turn(self):
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
@@ -311,7 +313,7 @@ class TexasHoldemGame:
                 self.community_cards.append(card)
                 
     def get_game_info(self, player):
-        return ("Pot: {self.pot}, Hand: {player.hand}, Community Cards: {self.pot}")
+        return (f"Pot: {self.pot}, Hand: {player.hand}, Community Cards: {self.pot}")
 
     def game_rounds(self):
         while len(self.players_in_round) > 1:
@@ -319,8 +321,8 @@ class TexasHoldemGame:
             if (player == last_raiser):
                 print('End of round!')
                 return
-            self.get_game_info(player)
-            bet_choice = self.make_bet_decision(player)
+            print(self.get_game_info(player))
+            bet_choice = player.make_bet_decision(player)
             if (bet_choice == "fold"):
                 # Handle the player's fold action
                 self.handle_fold_action(player)
