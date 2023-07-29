@@ -35,6 +35,7 @@ class Player:
     def clear_hand(self):
         self.hand = []
 
+    @staticmethod
     def get_player_input():
         # Prompt the player for input
         decision = input("Enter your betting decision (fold/call/raise): ").strip().lower()
@@ -50,7 +51,7 @@ class Player:
         
 
     def make_bet_decision(self, current_bet):
-        decision = get_player_input()
+        decision = Player.get_player_input()
         valid_options = ["fold", "call", "raise"]
         # Check the player's decision and act accordingly
         if (decision == "fold"):
@@ -58,7 +59,7 @@ class Player:
         elif (decision == "call"):
             return "call"
         elif (decision == "raise"):
-            raise_amount = get_raise_amount()
+            raise_amount = player.get_raise_amount()
             return "raise", raise_amount
         else:
             print("Invalid input. Please enter 'fold', 'call', or 'raise'.")
@@ -139,7 +140,7 @@ class Player:
     def has_royal_flush(hand):
         sorted_hand = sortedhand, key = lambda card: NUMBER.index(card.rank)
         consecutive_count = 1
-        for (i in range(1,len(sorted_hand))):
+        for i in range(1, len(sorted_hand)):
             prev_rank = NUMBER.index(sorted_hand[i-1].rank)
             current_rank = NUMBER.index(sorted_hand[i].rank)
             if (current_rank == prev_rank +1):
@@ -167,6 +168,10 @@ class TexasHoldemGame:
         self.community_cards = []
         self.pot = 0
         self.big_blind = 0
+        self.current_player_index = 0  #for turns
+
+    def next_turn(self):
+        self.current_player_index = (self.current_player_index + 1) % len(self.players)
 
     def add_player(self, player):
         self.players.append(player)
@@ -184,9 +189,9 @@ class TexasHoldemGame:
             if card:
                 self.community_cards.append(card)
     
-    def all_in_players(self)
-        for(players in self.players):
-            if (player.balance = 0 & player.make_bet_decision != "fold")
+    def all_in_players(self):
+        for players in self.players:
+            if (player.balance == 0 & player.make_bet_decision != "fold"):
                 print (f"{player} is all in")
 
     def insufficient_funds(self, player, current_bet):
@@ -270,6 +275,7 @@ class Bets:
         players_in_round = self.players.copy
 
         while (len(players_in_round) > 1):
+            player = player_in_round[self.current_player_index]
             for players in players_in_round:
                 if(player == last_raiser):
                     break
@@ -294,14 +300,16 @@ class Bets:
                     current_bet += raise_amount
                     last_raiser = player
                     continue
+                self.next_turn()
+
         # Check if players have enough chips to call or raise
         for player in players_in_round:
             if (player.make_bet_decision != "fold"):
                 amount_to_call = current_bet - player.pot
-                self.handle_insufficient_chips(player, amount_to_call)
+                self.insufficient_chips(player, amount_to_call)
 
         # Handle players who are all-in
-        self.handle_all_in_players()
+        self.all_in_players()
 
 
 
