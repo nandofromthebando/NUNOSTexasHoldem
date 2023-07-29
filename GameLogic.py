@@ -102,7 +102,22 @@ class Player:
             if (player.hand == A, K, Q, J, 10 & self.suit = self.suit)
                 print("{winner.name} got a Royal Flush")
                 if ((player.hand[0] == player.hand[0]) == ):"""
-
+                
+    def has_pair(self):
+        ranks_count = {}
+        for (card in hand):
+            rank = carrd.rank
+            ranks.ranks_count[rank] = ranks_count.get(rank,0) + 1
+    """def royal_flush
+    def Straight Flush
+    def Four of a Kind
+    def Full House
+    def Flush
+    def Straight
+    def Three of a Kind
+    def Two Pair
+    def One Pair
+    def High Card"""
 
 
 
