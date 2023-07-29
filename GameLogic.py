@@ -97,27 +97,62 @@ class Player:
             except ValueError:
                 print("Invalid input. Please enter a valid number.")
 
-   """ def get_best_hand_ranking(self):
-        for (player in self.players):
-            if (player.hand == A, K, Q, J, 10 & self.suit = self.suit)
-                print("{winner.name} got a Royal Flush")
-                if ((player.hand[0] == player.hand[0]) == ):"""
-                
-    def has_pair(self):
+
+    def get_best_hand_ranking(self):
+        hand = self.hand + self.community_cards
+
+        # Check for hand rankings from highest to lowest
+        if self.has_royal_flush(hand):
+            return "Royal Flush"
+        elif self.has_straight_flush(hand):
+            return "Straight Flush"
+        elif self.has_four_of_a_kind(hand):
+            return "Four of a Kind"
+        elif self.has_full_house(hand):
+            return "Full House"
+        elif self.has_flush(hand):
+            return "Flush"
+        elif self.has_straight(hand):
+            return "Straight"
+        elif self.has_three_of_a_kind(hand):
+            return "Three of a Kind"
+        elif self.has_two_pair(hand):
+            return "Two Pair"
+        elif self.has_pair(hand):
+            return "One Pair"
+        else:
+            return "High Card"
+
+    def has_pair(self, hand):
         ranks_count = {}
-        for (card in hand):
-            rank = carrd.rank
-            ranks.ranks_count[rank] = ranks_count.get(rank,0) + 1
-    """def royal_flush
-    def Straight Flush
-    def Four of a Kind
-    def Full House
-    def Flush
-    def Straight
-    def Three of a Kind
-    def Two Pair
-    def One Pair
-    def High Card"""
+
+        for card in hand:
+            rank = card.rank
+            ranks_count[rank] = ranks_count.get(rank, 0) + 1
+
+        for rank, count in ranks_count.items():
+            if count == 2:
+                return True
+
+        return False
+
+    def has_royal_flush(hand):
+        sorted_hand = sortedhand, key = lambda card: NUMBER.index(card.rank)
+        consecutive_count = 1
+        for (i in range(1,len(sorted_hand))):
+            prev_rank = NUMBER.index(sorted_hand[i-1].rank)
+            current_rank = NUMBER.index(sorted_hand[i].rank)
+            if (current_rank == prev_rank +1):
+                consecutive_count +=1 
+            else:
+                consecutive_count =1 
+            if consecutive_count ==5:
+                return True
+        if (sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2"):
+           if (sorted_hand[1].rank == "3" and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5"):
+            return True
+
+        return False
 
 
 
