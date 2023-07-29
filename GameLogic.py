@@ -59,7 +59,7 @@ class Player:
         elif (decision == "call"):
             return "call"
         elif (decision == "raise"):
-            raise_amount = player.get_raise_amount()
+            raise_amount = self.get_raise_amount()
             return "raise", raise_amount
         else:
             print("Invalid input. Please enter 'fold', 'call', or 'raise'.")
@@ -137,8 +137,8 @@ class Player:
 
         return False
 
-    def has_royal_flush(hand):
-        sorted_hand = sortedhand, key = lambda card: NUMBER.index(card.rank)
+    def has_royal_flush(self, hand):
+        sorted_hand = sorted(hand, key=lambda card: NUMBER.index(card.rank))
         consecutive_count = 1
         for i in range(1, len(sorted_hand)):
             prev_rank = NUMBER.index(sorted_hand[i-1].rank)
@@ -154,7 +154,115 @@ class Player:
             return True
 
         return False
+    
+    def has_straight_flush(self, hand):
+    # First, we check if the hand has a flush
+        suits_count = {}
+        for card in hand:
+            suit = card.suit
+            suits_count[suit] = suits_count.get(suit, 0) + 1
 
+        flush_suit = None
+        for suit, count in suits_count.items():
+            if count >= 5:
+                flush_suit = suit
+                break
+
+        if not flush_suit:
+            return False
+
+        # Then, we check if the flush has a straight
+        sorted_hand = sorted(hand, key=lambda card: NUMBER.index(card.rank))
+        consecutive_count = 1
+        for i in range(1, len(sorted_hand)):
+            prev_rank = NUMBER.index(sorted_hand[i - 1].rank)
+            current_rank = NUMBER.index(sorted_hand[i].rank)
+
+            # If the current card has the same suit as the flush suit and has a consecutive rank
+            if sorted_hand[i].suit == flush_suit and current_rank == prev_rank + 1:
+                consecutive_count += 1
+            else:
+                consecutive_count = 1
+
+            if consecutive_count == 5:
+                return True
+
+        # Check for the special case of a "Wheel" Straight Flush (A, 2, 3, 4, 5 of the same suit)
+        if sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2" and sorted_hand[1].rank == "3" \
+        and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5" and sorted_hand[-1].suit == flush_suit:
+            return True
+
+        return False
+    def has_four_of_a_kind(self, hand):
+        ranks_count = {}
+        for card in hand:
+            rank = card.rank
+            ranks_count[rank] = ranks_count.get(rank, 0) + 1
+
+        for rank, count in ranks_count.items():
+            if count == 4:
+                return True
+
+        return False
+
+    def has_full_house(self, hand):
+        return self.has_three_of_a_kind(hand) and self.has_two_pair(hand)
+
+    def has_flush(self, hand):
+        suits_count = {}
+        for card in hand:
+            suit = card.suit
+            suits_count[suit] = suits_count.get(suit, 0) + 1
+
+        for count in suits_count.values():
+            if count >= 5:
+                return True
+
+        return False
+
+    def has_straight(self, hand):
+        sorted_hand = sorted(hand, key=lambda card: NUMBER.index(card.rank))
+        consecutive_count = 1
+        for i in range(1, len(sorted_hand)):
+            prev_rank = NUMBER.index(sorted_hand[i - 1].rank)
+            current_rank = NUMBER.index(sorted_hand[i].rank)
+            if current_rank == prev_rank + 1:
+                consecutive_count += 1
+            else:
+                consecutive_count = 1
+
+            if consecutive_count == 5:
+                return True
+
+        # Check for the special case of a "Wheel" Straight (A, 2, 3, 4, 5)
+        if sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2" and sorted_hand[1].rank == "3" \
+           and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5":
+            return True
+
+        return False
+
+    def has_three_of_a_kind(self, hand):
+        ranks_count = {}
+        for card in hand:
+            rank = card.rank
+            ranks_count[rank] = ranks_count.get(rank, 0) + 1
+
+        for rank, count in ranks_count.items():
+            if count == 3:
+                return True
+
+        return False
+
+    def has_two_pair(self, hand):
+        pairs_count = 0
+        ranks_count = {}
+        for card in hand:
+            rank = card.rank
+            ranks_count[rank] = ranks_count.get(rank, 0) + 1
+            if ranks_count[rank] == 2:
+                pairs_count += 1
+
+        return pairs_count >= 2
 
 
 
@@ -169,6 +277,8 @@ class TexasHoldemGame:
         self.pot = 0
         self.big_blind = 0
         self.current_player_index = 0  #for turns
+        self.players_in_round = 0
+        self.last_raiser = 0
 
     def next_turn(self):
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
@@ -183,17 +293,28 @@ class TexasHoldemGame:
                 if card:
                     player.receive_card(card)
 
+    def clear_community_cards(self):
+        self.community_cards = []
+    
+    def reset_round(self):
+        # Clear the community cards at the beginning of each round
+        self.clear_community_cards()
+
+    def reset_community_cards(self):
+        print("Resetting community cards...")
+        self.clear_community_cards()
+
     def deal_community_cards(self, num_cards):
         for _ in range(num_cards):
             card = self.deck.deal()
             if card:
                 self.community_cards.append(card)
                 
-    def get_game_info(self):
-        return ("Pot: {player.pot}, Hand: {player.hand}, Community Cards: {player.pot}")
+    def get_game_info(self, player):
+        return ("Pot: {self.pot}, Hand: {player.hand}, Community Cards: {self.pot}")
 
     def game_rounds(self):
-        while len(players_in_round) > 1:
+        while len(self.players_in_round) > 1:
             player = self.players_in_round[self.current_player_index]
             if (player == last_raiser):
                 print('End of round!')
@@ -214,6 +335,9 @@ class TexasHoldemGame:
                 self.handle_raise_action(player, current_bet, raise_amount)
                 current_bet += raise_amount
                 self.last_raiser = player
+            elif bet_choice == "reset":
+                # Allow players to reset the community cards (optional)
+                self.reset_community_cards()
 
             # Move to the next player's turn
             self.next_turn()
@@ -306,7 +430,7 @@ class Bets:
     def collect_bets(self):
         current_bet = self.big_blind
         last_raiser = None
-        players_in_round = self.players.copy
+        players_in_round = self.players.copy()
 
         while (len(players_in_round) > 1):
             player = player_in_round[self.current_player_index]
@@ -334,7 +458,7 @@ class Bets:
                     current_bet += raise_amount
                     last_raiser = player
                     continue
-                self.next_turn()
+        self.next_turn()
 
         # Check if players have enough chips to call or raise
         for player in players_in_round:
