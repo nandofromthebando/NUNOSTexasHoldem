@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import random
 
 # Define constants for card ranks and suits
