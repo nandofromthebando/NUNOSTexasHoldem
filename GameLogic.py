@@ -435,7 +435,7 @@ class Bets:
         players_in_round = self.players.copy()
 
         while (len(players_in_round) > 1):
-            player = player_in_round[self.current_player_index]
+            player = players_in_round[self.current_player_index]
             for players in players_in_round:
                 if(player == last_raiser):
                     break
