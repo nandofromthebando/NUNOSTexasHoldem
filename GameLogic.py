@@ -289,6 +289,34 @@ class TexasHoldemGame:
     def add_player(self, player):
         self.players.append(player)
 
+    def make_ai_bets(self, current_bet):
+        for player in self.players:
+            if isinstance(player, AIPlayer):
+                bet_choice = player.make_bet_decision(current_bet)
+
+                if bet_choice == "fold":
+                    # Handle the AI player folding
+                    self.handle_fold_action(player)
+                    # Remove the AI player from the list of active players
+                    self.players_in_round.remove(player)
+                elif bet_choice == "call":
+                    # Handle the AI player calling
+                    amount_to_call = current_bet - player.pot
+                    self.handle_call_action(player, amount_to_call)
+                elif bet_choice == "raise":
+                    # Handle the AI player raising
+                    raise_amount = player.get_raise_amount()
+                    self.handle_raise_action(player, current_bet, raise_amount)
+                    current_bet += raise_amount
+                    self.last_raiser = player
+
+        # Move to the next turn after all AI players have made their bets
+        self.next_turn()
+
+    def add_ai_player(self, name, initial_balance):
+        ai_player = AIPlayer(name, initial_balance)
+        self.players.append(ai_player)
+
     def deal_hole_cards(self):
         for _ in range(2):
             for player in self.players:
