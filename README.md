@@ -46,9 +46,6 @@ Represents a player in the game with a name, balance (chips), and hand (cards). 
 
 The main class that orchestrates the game. It manages the deck, players, community cards, and the betting rounds.
 
-### `Bets` Class
-
-Handles the logic for collecting bets and managing the betting rounds.
 
 ## Database
 
