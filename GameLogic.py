@@ -249,7 +249,7 @@ class TexasHoldemGame:
                 current_bet += raise_amount
                 last_raiser = current_player
                 continue
-        self.next_turn()
+        self.collect_bets()
 
         # Check if players have enough chips to call or raise
         for player in players_in_round:
@@ -259,8 +259,15 @@ class TexasHoldemGame:
 
         # Handle players who are all-in
         self.all_in_players()
+        self.next_turn()
 
-
+def next_turn(self):
+    num_players = len(self.players)
+    while True:
+        self.current_player_index = (self.current_player_index + 1) % num_players
+        player = self.players[self.current_player_index]
+        if not player.folded:
+            break
 
 
 if __name__ == "__main__":
