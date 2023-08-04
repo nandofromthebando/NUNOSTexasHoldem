@@ -192,7 +192,7 @@ class TexasHoldemGame:
         player_rankings = {}
         for player in active_players:
             player_hand = player.hand + self.community_cards
-            best_ranking = player.get_best_hand_ranking(player_hand)
+            best_ranking = player.get_best_hand_ranking()
             player_rankings[player] = best_ranking
 
         # Find the highest hand ranking among the active players
@@ -221,7 +221,7 @@ class TexasHoldemGame:
         current_bet = self.big_blind
         last_raiser = None
         players_in_round = self.players.copy()
-
+        self.current_player_index = 0
         while (len(players_in_round) > 1):
             current_player = players_in_round[self.current_player_index]
             if(current_player == last_raiser):
@@ -249,25 +249,24 @@ class TexasHoldemGame:
                 current_bet += raise_amount
                 last_raiser = current_player
                 continue
-        self.collect_bets()
-
+            self.current_player_index += 1
         # Check if players have enough chips to call or raise
         for player in players_in_round:
             if (player.make_bet_decision != "fold"):
                 amount_to_call = current_bet - player.pot
-                self.insufficient_chips(player, amount_to_call)
+                self.insufficient_funds(player, amount_to_call)
 
         # Handle players who are all-in
         self.all_in_players()
         self.next_turn()
 
-def next_turn(self):
-    num_players = len(self.players)
-    while True:
-        self.current_player_index = (self.current_player_index + 1) % num_players
-        player = self.players[self.current_player_index]
-        if not player.folded:
-            break
+    def next_turn(self):
+        num_players = len(self.players)
+        while True:
+            self.current_player_index = (self.current_player_index + 1) % num_players
+            player = self.players[self.current_player_index]
+            if not player.folded:
+                break
 
 
 if __name__ == "__main__":

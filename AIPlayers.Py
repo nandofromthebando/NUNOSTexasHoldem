@@ -2,6 +2,7 @@
 from player import Player
 
 class AIPlayer(Player):
+    NUMBER = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
     def make_bet_decision(self, current_bet):
         if self.has_royal_flush(self.hand):
             return "raise"
