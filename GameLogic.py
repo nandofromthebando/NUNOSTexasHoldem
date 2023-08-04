@@ -223,30 +223,32 @@ class TexasHoldemGame:
         players_in_round = self.players.copy()
 
         while (len(players_in_round) > 1):
-            player = players_in_round[self.current_player_index]
-            for players in players_in_round:
-                if(player == last_raiser):
-                    break
-                if(players.folded):
-                    continue
+            current_player = players_in_round[self.current_player_index]
+            if(current_player == last_raiser):
+                break
+            if(current_player.folded):
+                players_in_round.remove(player)
+                continue
+            if isinstance(current_player, AIPlayer):
+                bet_choice = current_player.make_bet_decision(current_bet)
+            else:
+                bet_choice = current_player.make_bet_decision()
+            
+            if(bet_choice == "fold"):
+                players_in_round.remove(current_player)
+                continue
 
-                bet_choice = player.make_bet_decision()
-                
-                if(bet_choice == "fold"):
-                    players_in_round.remove(player)
-                    continue
+            if (bet_choice == "call"):
+                amount_to_call = current_bet - current_player.current_bet
+                current_player.make_bet(amount_to_call)
+                continue
 
-                if (bet_choice == "call"):
-                    amount_to_call = current_bet - player.current_bet
-                    player.make_bet(amount_to_call)
-                    continue
-
-                if (bet_choice == "raise"):
-                    raise_amount = player.get_raise_amount()
-                    player.make_bet(current_bet + raise_amount)
-                    current_bet += raise_amount
-                    last_raiser = player
-                    continue
+            if (bet_choice == "raise"):
+                raise_amount = current_player.get_raise_amount()
+                current_bet.make_bet(current_bet + raise_amount)
+                current_bet += raise_amount
+                last_raiser = current_player
+                continue
         self.next_turn()
 
         # Check if players have enough chips to call or raise
