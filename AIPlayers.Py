@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from GameLogic import Player
+
 class AIPlayer(Player):
     def make_bet_decision(self, current_bet):
         if self.has_royal_flush(self.hand):

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import random
+from AIPlayers import AIPlayer
 
 # Define constants for card ranks and suits
 NUMBER = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
@@ -326,6 +327,9 @@ class TexasHoldemGame:
                 card = self.deck.deal()
                 if card:
                     player.receive_card(card)
+        # After dealing, display each player's hole cards
+        for player in self.players:
+            print(f"{player.name}'s Hole Cards: {', '.join(str(card) for card in player.hand)}")
 
     def clear_community_cards(self):
         self.community_cards = []
@@ -345,6 +349,10 @@ class TexasHoldemGame:
             card = self.deck.deal()
             if card:
                 self.community_cards.append(card)
+        # After dealing community cards, display the current state of each player's hand
+        for player in self.players:
+            print(f"{player.name}'s Hole Cards: {', '.join(str(card) for card in player.hand)}")
+            print(f"{player.name}'s Hand: {', '.join(str(card) for card in player.hand + self.community_cards)}")
                 
     def get_game_info(self, player):
         return (f"Pot: {self.pot}, Hand: {player.hand}, Community Cards: {self.pot}")
@@ -506,15 +514,21 @@ class TexasHoldemGame:
 
 
 
-# Example usage:
 if __name__ == "__main__":
+    # Create a new game instance
     game = TexasHoldemGame()
-    player1 = Player("Alice", 1000)
-    player2 = Player("Bob", 1000)
 
-    game.add_player(player1)
-    game.add_player(player2)
+    # Create AI players with desired names and initial balances
+    ai_player1 = AIPlayer("AIPlayer1", 1000)
+    ai_player2 = AIPlayer("AIPlayer2", 1000)
+    ai_player3 = AIPlayer("AIPlayer3", 1000)
 
+    # Add the AI players to the game
+    game.add_player(ai_player1)
+    game.add_player(ai_player2)
+    game.add_player(ai_player3)
+
+    # Start the game
     while len(game.players) > 1:
         game.start_new_round()
 
