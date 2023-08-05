@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import random
 from AIPlayers import AIPlayer
-from player import Player
+from player import Player, UserPlayer
 
 # Define constants for card ranks and suits
 NUMBER = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
@@ -75,8 +75,8 @@ class TexasHoldemGame:
                 if card:
                     player.receive_card(card)
         # After dealing, display each player's hole cards
-        for player in self.players:
-            print(f"{player.name}'s Hole Cards: {', '.join(str(card) for card in player.hand)}")
+        user_player = [player for player in self.players if isinstance(player, UserPlayer)][0]
+        print(f"Your Hole Cards: {', '.join(str(card) for card in user_player.hand)}")
 
     def clear_community_cards(self):
         self.community_cards = []
@@ -258,7 +258,7 @@ class TexasHoldemGame:
 
         # Handle players who are all-in
         self.all_in_players()
-        self.next_turn()
+        #self.next_turn()
 
     def next_turn(self):
         num_players = len(self.players)
@@ -278,10 +278,15 @@ if __name__ == "__main__":
     ai_player2 = AIPlayer("AIPlayer2", 1000)
     ai_player3 = AIPlayer("AIPlayer3", 1000)
 
+    user_player = UserPlayer("{name}", 1000)
+
     # Add the AI players to the game
     game.add_player(ai_player1)
     game.add_player(ai_player2)
     game.add_player(ai_player3)
+    game.add_player(user_player)
+
+
 
     # Start the game
     while len(game.players) > 1:

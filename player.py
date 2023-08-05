@@ -252,7 +252,48 @@ class Player:
 
         return pairs_count >= 2
 
+class UserPlayer:
+    
+    def __init__(self, name, initial_balance):
+        self.name = name
+        self.balance = initial_balance
+        self.hand = []
+        self.current_bet = 0
+
+    def recieve_hand(self, cards):
+        self.hand = cards
+
+    def make_bet_decision(self, valid_options):
+
+        print(f"{self.name}'s Hole Cards: {', '.join(str(card) for card in self.hand)}")
+        print(f"Community Cards: {', '.join(str(card) for card in self.community_cards)}")
+        print(f"{self.name}'s Hand: {', '.join(str(card) for card in self.hand + self.community_cards)}")
+        while True:
+            bet_input = input("Enter your bet decision (fold, check, call, raise): ").lower()
+
+            if bet_input == "fold":
+                return 0  # Folding, so bet amount is 0.
+            elif bet_input in ["check", "call"]:
+                return valid_options[0]  # Check or call, so bet the minimum valid amount.
+            elif bet_input == "raise":
+                try:
+                    # Prompt the user for the raise amount
+                    raise_amount = int(input("Enter the amount you want to raise: "))
+
+                    # Check if the entered raise_amount is valid and within the valid_options
+                    if raise_amount >= valid_options[1]:
+                        return raise_amount
+                    else:
+                        print("Invalid raise amount. Please enter a valid amount greater than or equal to the minimum raise.")
+                except ValueError:
+                    print("Invalid input. Please enter a valid number.")
+            else:
+                print("Invalid bet decision. Please enter a valid decision (fold, check, call, raise).")
 
 
+    def clear_hand(self):
+        
+    def update_balance(self, amount):
+        self.balance += amount
 
 
