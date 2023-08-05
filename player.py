@@ -253,12 +253,13 @@ class Player:
         return pairs_count >= 2
 
 class UserPlayer:
-    
-    def __init__(self, name, initial_balance):
+    def __init__(self, name, balance):
         self.name = name
-        self.balance = initial_balance
+        self.balance = balance
         self.hand = []
-        self.current_bet = 0
+        self.pot = 0
+        self.folded = False
+        self.community_cards = []
 
     def recieve_hand(self, cards):
         self.hand = cards
@@ -292,8 +293,11 @@ class UserPlayer:
 
 
     def clear_hand(self):
+        self.hand = []
         
     def update_balance(self, amount):
         self.balance += amount
 
-
+    
+    def receive_card(self, card):
+        self.hand.append(card)
