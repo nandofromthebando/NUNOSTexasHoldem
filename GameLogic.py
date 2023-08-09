@@ -242,8 +242,8 @@ class TexasHoldemGame:
 
             if (bet_choice == "raise"):
                 raise_amount = current_player.get_raise_amount()
-                current_bet.make_bet(current_bet + raise_amount)
                 current_bet += raise_amount
+                current_bet.make_bet(current_bet)
                 last_raiser = current_player
                 continue
             self.current_player_index += 1
