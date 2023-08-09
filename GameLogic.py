@@ -96,20 +96,15 @@ class TexasHoldemGame:
             card = self.deck.deal()
             if card:
                 self.community_cards.append(card)
-        # After dealing community cards, display the current state of each player's hand
-        for player in self.players:
-            print(f"{player.name}'s Hole Cards: {', '.join(str(card) for card in player.hand)}")
-            print(f"{player.name}'s Hand: {', '.join(str(card) for card in player.hand + self.community_cards)}")
-                
+
+
     def get_game_info(self, player):
         return (f"Pot: {self.pot}, Hand: {player.hand}, Community Cards: {self.pot}")
 
     def game_rounds(self):
         while len(self.players_in_round) > 1:
             player = self.players_in_round[self.current_player_index]
-            if (player == last_raiser):
-                print('End of round!')
-                return
+           
             print(self.get_game_info(player))
             bet_choice = player.make_bet_decision(player)
             if (bet_choice == "fold"):
@@ -129,7 +124,9 @@ class TexasHoldemGame:
             elif bet_choice == "reset":
                 # Allow players to reset the community cards (optional)
                 self.reset_community_cards()
-
+            if (player == last_raiser):
+                print('End of round!')
+                return
             # Move to the next player's turn
             self.collect_bets()
 
