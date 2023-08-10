@@ -110,10 +110,11 @@ class TexasHoldemGame:
         return (f"Pot: {self.pot}, Hand: {player.hand}, Community Cards: {self.community_cards}")
 
     def handle_raise_action(player, current_bet, raise_amount):
-        if (raise_amount < player.balance):
+        if (raise_amount > player.balance):
             raise_amount = player.balance
         player.make_bet(raise_amount)
         self.pot+= raise_amount
+        self.current_bet = raise_amount
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
 
     def game_rounds(self):
@@ -148,7 +149,7 @@ class TexasHoldemGame:
                 return
             # Move to the next player's turn
             self.collect_bets()
-            self.next_turn
+            self.next_turn()
 
         # Code outside the loop will be executed after the end of the round
         self.showdown()
@@ -273,7 +274,7 @@ class TexasHoldemGame:
 
         # Handle players who are all-in
         self.all_in_players()
-        #self.next_turn()
+        self.next_turn()
 
     def next_turn(self):
         num_players = len(self.players)
