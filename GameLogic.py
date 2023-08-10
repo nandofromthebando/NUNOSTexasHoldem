@@ -40,6 +40,14 @@ class TexasHoldemGame:
     def add_player(self, player):
         self.players.append(player)
 
+    def handle_call_action(player, amount_to_call):
+        if (amount_to_call < player.balance):
+            amount_to_call = player.balance
+        player.make_bet(amount_to_call)
+        self.pot+= amount_to_call
+        self.current_player_index = (self.current_player_index + 1) % len(self.players)
+
+
     def make_ai_bets(self, current_bet):
         for player in self.players:
             if isinstance(player, AIPlayer):
@@ -140,6 +148,7 @@ class TexasHoldemGame:
                 return
             # Move to the next player's turn
             self.collect_bets()
+            self.next_turn
 
         # Code outside the loop will be executed after the end of the round
         self.showdown()
@@ -227,8 +236,7 @@ class TexasHoldemGame:
     def collect_bets(self):
         current_bet = self.big_blind
         last_raiser = None
-        players_in_round = self.players.copy()
-        self.current_player_index = 0
+        players_in_round = self.players
         while (len(players_in_round) > 1):
             current_player = players_in_round[self.current_player_index]
             if(current_player == last_raiser):
