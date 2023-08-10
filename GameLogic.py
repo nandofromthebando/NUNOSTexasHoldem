@@ -45,16 +45,16 @@ class TexasHoldemGame:
             if isinstance(player, AIPlayer):
                 bet_choice = player.make_bet_decision(current_bet)
 
-                if bet_choice == "fold":
+                if (bet_choice == "fold"):
                     # Handle the AI player folding
                     self.handle_fold_action(player)
                     # Remove the AI player from the list of active players
                     self.players_in_round.remove(player)
-                elif bet_choice == "call":
+                elif (bet_choice == "call"):
                     # Handle the AI player calling
                     amount_to_call = current_bet - player.pot
                     self.handle_call_action(player, amount_to_call)
-                elif bet_choice == "raise":
+                elif (bet_choice == "raise"):
                     # Handle the AI player raising
                     raise_amount = 0.1 * player.balance
                     self.handle_raise_action(player, current_bet, raise_amount)
@@ -99,7 +99,14 @@ class TexasHoldemGame:
 
 
     def get_game_info(self, player):
-        return (f"Pot: {self.pot}, Hand: {player.hand}, Community Cards: {self.pot}")
+        return (f"Pot: {self.pot}, Hand: {player.hand}, Community Cards: {self.community_cards}")
+
+    def handle_raise_action(player, current_bet, raise_amount):
+        if (raise_amount < player.balance):
+            raise_amount = player.balance
+        player.make_bet(raise_amount)
+        self.pot+= raise_amount
+        self.current_player_index = (self.current_player_index + 1) % len(self.players)
 
     def game_rounds(self):
         while len(self.players_in_round) > 1:
@@ -109,19 +116,23 @@ class TexasHoldemGame:
             bet_choice = player.make_bet_decision(player)
             if (bet_choice == "fold"):
                 # Handle the player's fold action
-                self.handle_fold_action(player)
                 self.players_in_round.remove(player)
             elif (bet_choice == "call"):
                 # Handle the player's call action
                 amount_to_call = current_bet - player.pot
                 self.handle_call_action(player, amount_to_call)
             elif (bet_choice == "raise"):
+                if(player == AIPlayer):
+                    raise_amount = .1* player.balance
+                    current_bet += raise_amount
+                    self.last_raiser = player
                 # Handle the player's raise action
-                raise_amount = player.get_raise_amount()
-                self.handle_raise_action(player, current_bet, raise_amount)
-                current_bet += raise_amount
-                self.last_raiser = player
-            elif bet_choice == "reset":
+                else:
+                    raise_amount = player.get_raise_amount()
+                    self.handle_raise_action(player, current_bet, raise_amount)
+                    current_bet += raise_amount
+                    self.last_raiser = player
+            elif (bet_choice == "reset"):
                 # Allow players to reset the community cards (optional)
                 self.reset_community_cards()
             if (player == last_raiser):
@@ -132,7 +143,6 @@ class TexasHoldemGame:
 
         # Code outside the loop will be executed after the end of the round
         self.showdown()
-        self.reset_game()
 
     
     def all_in_players(self):
