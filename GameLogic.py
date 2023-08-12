@@ -104,6 +104,7 @@ class TexasHoldemGame:
             card = self.deck.deal()
             if card:
                 self.community_cards.append(card)
+        print(f"Community Cards: {', '.join(str(card) for card in self.community_cards)}")
 
 
     def get_game_info(self, player):
@@ -247,7 +248,10 @@ class TexasHoldemGame:
                 bet_choice = current_player.make_bet_decision(current_bet)
             else:
                 bet_choice = current_player.make_bet_decision(current_bet)
-            
+            if isinstance(current_player, UserPlayer):
+                bet_choice = user_player.make_bet_decision(current_bet)
+            else:
+                bet_choice = user_player.make_bet_decision(current_bet)
             if(bet_choice == "fold"):
                 players_in_round.remove(current_player)
                 continue
