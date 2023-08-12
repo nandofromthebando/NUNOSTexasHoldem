@@ -79,7 +79,7 @@ class Player:
     def get_raise_amount(self):
          while True:
             try:
-                raise_amt = float(input("Enter the amount you would like to raise: "))
+                raise_amt = int(input("Enter the amount you would like to raise: "))
                 if raise_amt <= 0:
                     print("Invalid amount. Please enter a positive value.")
                 else:

@@ -244,7 +244,7 @@ class TexasHoldemGame:
             if(current_player.folded):
                 players_in_round.remove(player)
                 break
-            if isinstance(current_player, AIPlayer):
+            if isinstance(current_player , AIPlayer):
                 bet_choice = AIPlayer.make_bet_decision(current_bet)
                 if (bet_choice == "raise"):
                     raise_amount = .1 *self.balance()
@@ -256,10 +256,10 @@ class TexasHoldemGame:
                 if isinstance(current_player, UserPlayer):
                     bet_choice = user_player.make_bet_decision(current_bet)
                     if (bet_choice == "raise"):
-                        raise_amount = current_player.get_raise_amount()
+                        raise_amount = user_player.get_raise_amount()
                         current_bet += raise_amount
                         current_bet.make_bet(current_bet)
-                        last_raiser = current_player
+                        last_raiser = user_player
                         continue
             if(bet_choice == "fold"):
                 players_in_round.remove(current_player)
