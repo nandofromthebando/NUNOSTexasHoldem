@@ -237,6 +237,7 @@ class TexasHoldemGame:
         current_bet = self.big_blind
         last_raiser = None
         players_in_round = self.players
+        valid_options = ["fold", "check", "call", "raise"]
         while (len(players_in_round) > 1):
             current_player = players_in_round[self.current_player_index]
             if(current_player == last_raiser):
@@ -244,31 +245,28 @@ class TexasHoldemGame:
             if(current_player.folded):
                 players_in_round.remove(player)
                 break
-            if isinstance(current_player , AIPlayer):
-                bet_choice = AIPlayer.make_bet_decision(current_bet)
-                if (bet_choice == "raise"):
-                    raise_amount = .1 *self.balance()
+            if isinstance(current_player, AIPlayer):
+                bet_choice = current_player.make_bet_decision()
+                if bet_choice == "raise":
                     current_bet += raise_amount
-                    current_bet.make_bet(current_bet)
+                    current_player.make_bet(bet_choice, raise_amount)
                     last_raiser = current_player
-                    continue
-            else:
-                if isinstance(current_player, UserPlayer):
-                    bet_choice = user_player.make_bet_decision(current_bet)
-                    if (bet_choice == "raise"):
-                        raise_amount = user_player.get_raise_amount()
-                        current_bet += raise_amount
-                        current_bet.make_bet(current_bet)
-                        last_raiser = user_player
-                        continue
-            if(bet_choice == "fold"):
+
+            elif isinstance(current_player, UserPlayer):
+                bet_choice = current_player.make_bet_decision(valid_options)
+                if bet_choice == "raise":
+                    raise_amount = current_player.get_raise_amount()
+                    current_bet += raise_amount
+                    current_player.make_bet(bet_choice, raise_amount)
+                    last_raiser = current_player
+
+            if bet_choice == "fold":
                 players_in_round.remove(current_player)
                 continue
 
-            if (bet_choice == "call"):
-                amount_to_call = current_bet
+            if bet_choice == "call":
+                amount_to_call = current_bet - current_player.pot
                 current_player.make_bet(bet_choice, amount_to_call)
-                continue
 
             print(f"{current_player.name} {bet_choice}")
             self.current_player_index += 1

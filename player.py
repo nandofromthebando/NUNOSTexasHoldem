@@ -262,6 +262,7 @@ class UserPlayer:
         self.pot = 0
         self.folded = False
         self.community_cards = []
+        valid_options = ["fold", "call", "raise"]
 
     def recieve_hand(self, cards):
         self.hand = cards
