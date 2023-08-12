@@ -51,25 +51,19 @@ class TexasHoldemGame:
     def make_ai_bets(self, current_bet):
         for player in self.players:
             if isinstance(player, AIPlayer):
-                bet_choice = player.make_bet_decision(current_bet)
+                bet_choice, raise_amount = player.make_bet_decision(current_bet)
 
-                if (bet_choice == "fold"):
-                    # Handle the AI player folding
+                if bet_choice == "fold":
                     self.handle_fold_action(player)
-                    # Remove the AI player from the list of active players
                     self.players_in_round.remove(player)
-                elif (bet_choice == "call"):
-                    # Handle the AI player calling
+                elif bet_choice == "call":
                     amount_to_call = current_bet - player.pot
                     self.handle_call_action(player, amount_to_call)
-                elif (bet_choice == "raise"):
-                    # Handle the AI player raising
-                    raise_amount = 0.1 * player.balance
+                elif bet_choice == "raise":
                     self.handle_raise_action(player, current_bet, raise_amount)
                     current_bet += raise_amount
                     self.last_raiser = player
 
-        # Move to the next turn after all AI players have made their bets
         self.collect_bets()
 
     def add_ai_player(self, name, initial_balance):
@@ -125,8 +119,8 @@ class TexasHoldemGame:
             print(self.get_game_info(player))
             if isinstance(player, UserPlayer):
                 bet_choice = input(f"Your turn, {player.name}. Enter 'fold', 'call', 'raise', or 'reset': ")
-            else:
-                bet_choice = player.make_bet_decision()
+            elif isinstance(player, AIPlayer):
+                bet_choice, raise_amount = player.make_bet_decision(valid_options)
 
             if bet_choice == "fold":
                 # Handle the player's fold action
@@ -246,7 +240,7 @@ class TexasHoldemGame:
                 players_in_round.remove(player)
                 break
             if isinstance(current_player, AIPlayer):
-                bet_choice = current_player.make_bet_decision()
+                bet_choice, raise_amount = AIPlayer.make_bet_decision(current_bet)
                 if bet_choice == "raise":
                     current_bet += raise_amount
                     current_player.make_bet(bet_choice, raise_amount)
