@@ -255,7 +255,7 @@ class TexasHoldemGame:
             if(bet_choice == "fold"):
                 players_in_round.remove(current_player)
                 continue
-
+            
             if (bet_choice == "call"):
                 amount_to_call = current_bet - current_player.current_bet
                 current_player.make_bet(amount_to_call)

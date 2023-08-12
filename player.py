@@ -274,7 +274,7 @@ class UserPlayer:
             if bet_input == "fold":
                 return 0  # Folding, so bet amount is 0.
             elif bet_input in ["check", "call"]:
-                return valid_options[0]  # Check or call, so bet the minimum valid amount.
+                return "call"  # Check or call, so bet the minimum valid amount.
             elif bet_input == "raise":
                 try:
                     # Prompt the user for the raise amount
