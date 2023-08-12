@@ -245,7 +245,7 @@ class TexasHoldemGame:
                 players_in_round.remove(player)
                 continue
             if isinstance(current_player, AIPlayer):
-                bet_choice = current_player.make_bet_decision(current_bet)
+                bet_choice = AIPlayer.make_bet_decision(current_bet)
             else:
                 bet_choice = current_player.make_bet_decision(current_bet)
             if isinstance(current_player, UserPlayer):
@@ -267,6 +267,7 @@ class TexasHoldemGame:
                 current_bet.make_bet(current_bet)
                 last_raiser = current_player
                 continue
+            print(f"{current_player.name} {bet_choice}")
             self.current_player_index += 1
         # Check if players have enough chips to call or raise
         for player in players_in_round:
