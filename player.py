@@ -2,6 +2,7 @@
 # Define constants for card ranks and suits
 NUMBER = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+
 class Player:
     def __init__(self, name, balance):
         self.name = name
@@ -272,8 +273,10 @@ class UserPlayer:
             bet_input = input("Enter your bet decision (fold, check, call, raise): ").lower()
 
             if bet_input == "fold":
+                print("Player folded")
                 return 0  # Folding, so bet amount is 0.
             elif bet_input in ["check", "call"]:
+                print("Player called")
                 return "call"  # Check or call, so bet the minimum valid amount.
             elif bet_input == "raise":
                 try:
@@ -282,6 +285,7 @@ class UserPlayer:
 
                     # Check if the entered raise_amount is valid and within the valid_options
                     if raise_amount >= 1:
+                        print(f"Player raised {raise_amount} chips")
                         return raise_amount
                     else:
                         print("Invalid raise amount. Please enter a valid amount greater than or equal to the minimum raise.")

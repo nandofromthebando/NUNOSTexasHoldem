@@ -190,7 +190,7 @@ class TexasHoldemGame:
             self.deal_community_cards(1)
             self.collect_bets()
 
-        if len(self.players) > 1:
+        if len(self.players) >= 1:
             self.showdown()
             
 
@@ -243,7 +243,7 @@ class TexasHoldemGame:
                 break
             if(current_player.folded):
                 players_in_round.remove(player)
-                continue
+                break
             if isinstance(current_player, AIPlayer):
                 bet_choice = AIPlayer.make_bet_decision(current_bet)
                 if (bet_choice == "raise"):
@@ -270,7 +270,6 @@ class TexasHoldemGame:
                 current_player.make_bet(bet_choice, amount_to_call)
                 continue
 
-            
             print(f"{current_player.name} {bet_choice}")
             self.current_player_index += 1
         # Check if players have enough chips to call or raise
