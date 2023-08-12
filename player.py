@@ -267,9 +267,7 @@ class UserPlayer:
 
     def make_bet_decision(self, valid_options):
 
-        print(f"{self.name}'s Hole Cards: {', '.join(str(card) for card in self.hand)}")
-        print(f"Community Cards: {', '.join(str(card) for card in self.community_cards)}")
-        print(f"{self.name}'s Hand: {', '.join(str(card) for card in self.hand + self.community_cards)}")
+
         while True:
             bet_input = input("Enter your bet decision (fold, check, call, raise): ").lower()
 
@@ -283,7 +281,7 @@ class UserPlayer:
                     raise_amount = int(input("Enter the amount you want to raise: "))
 
                     # Check if the entered raise_amount is valid and within the valid_options
-                    if raise_amount >= valid_options[1]:
+                    if raise_amount >= 1:
                         return raise_amount
                     else:
                         print("Invalid raise amount. Please enter a valid amount greater than or equal to the minimum raise.")
