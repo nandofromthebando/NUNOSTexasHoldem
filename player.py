@@ -224,9 +224,9 @@ class Player:
                 return True
 
         # Check for the special case of a "Wheel" Straight (A, 2, 3, 4, 5)
-        if sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2" and sorted_hand[1].rank == "3" \
-           and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5":
-            return True
+        if (len(sorted_hand) >=2) and sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2" and sorted_hand[1].rank == "3" and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5":
+                return True
+
 
         return False
 
@@ -393,9 +393,10 @@ class UserPlayer:
                 return True
 
         # Check for the special case of a "Wheel" Straight Flush (A, 2, 3, 4, 5 of the same suit)
-        if sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2" and sorted_hand[1].rank == "3" \
-        and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5" and sorted_hand[-1].suit == flush_suit:
-            return True
+        if (len(sorted_hand) >=2):
+            if sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2" and sorted_hand[1].rank == "3" \
+            and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5" and sorted_hand[-1].suit == flush_suit:
+                return True
 
         return False
     def has_four_of_a_kind(self, hand):
@@ -440,9 +441,8 @@ class UserPlayer:
                 return True
 
         # Check for the special case of a "Wheel" Straight (A, 2, 3, 4, 5)
-        if sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2" and sorted_hand[1].rank == "3" \
-           and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5":
-            return True
+        if (len(sorted_hand) >=2) and sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2" and sorted_hand[1].rank == "3" and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5":
+                return True
 
         return False
 

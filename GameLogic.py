@@ -306,6 +306,6 @@ if __name__ == "__main__":
 
     # Start the game
     while len(game.players) > 1:
-        game.game_rounds()
+        game.start_new_round()
 
     # At this point, the game has ended, and there is a winner.
