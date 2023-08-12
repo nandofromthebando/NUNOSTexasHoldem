@@ -137,9 +137,10 @@ class Player:
                 consecutive_count =1 
             if consecutive_count ==5:
                 return True
-        if (sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2"):
-           if (sorted_hand[1].rank == "3" and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5"):
-            return True
+        if (len(sorted_hand) >=2):
+            if (sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2"):
+                if (sorted_hand[1].rank == "3" and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5"):
+                    return True
 
         return False
     
@@ -352,9 +353,10 @@ class UserPlayer:
                 consecutive_count =1 
             if consecutive_count ==5:
                 return True
-        if (sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2"):
-           if (sorted_hand[1].rank == "3" and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5"):
-            return True
+        if (len(sorted_hand) >=2):
+            if (sorted_hand[-1].rank == "A" and sorted_hand[0].rank == "2"):
+                if (sorted_hand[1].rank == "3" and sorted_hand[2].rank == "4" and sorted_hand[3].rank == "5"):
+                    return True
 
         return False
     
