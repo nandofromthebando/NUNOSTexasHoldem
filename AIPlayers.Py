@@ -176,7 +176,6 @@ def has_two_pair(self, hand):
 
     return pairs_count >= 2
 
-class UserPlayer:
     def __init__(self, name, balance):
         self.name = name
         self.balance = balance
@@ -199,6 +198,9 @@ class UserPlayer:
             self.pot += amount + raise_amount 
             self.balance -= (amount + raise_amount)
 
+    def get_raise_amount(self):
+         return (.1*self.balance)
+        
     def handle_fold_action(self):
         self.folded = True
         self.clear_hand()

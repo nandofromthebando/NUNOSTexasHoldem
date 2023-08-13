@@ -254,7 +254,7 @@ class Player:
 
         return pairs_count >= 2
 
-class UserPlayer:
+class UserPlayer(Player):
     def __init__(self, name, balance):
         self.name = name
         self.balance = balance

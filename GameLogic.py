@@ -240,7 +240,7 @@ class TexasHoldemGame:
                 players_in_round.remove(player)
                 break
             if isinstance(current_player, AIPlayer):
-                bet_choice, raise_amount = AIPlayer.make_bet_decision(current_bet)
+                bet_choice = AIPlayer.make_bet_decision(current_bet)
                 if bet_choice == "raise":
                     current_bet += raise_amount
                     current_player.make_bet(bet_choice, raise_amount)
@@ -273,7 +273,7 @@ class TexasHoldemGame:
         # Handle players who are all-in
         self.all_in_players()
         self.next_turn()
-
+        
     def next_turn(self):
         num_players = len(self.players)
         while True:
