@@ -133,14 +133,10 @@ class TexasHoldemGame:
                     # Allow players to reset the community cards (optional)
                     self.reset_community_cards()
             elif isinstance(player, AIPlayer):
-                make_ai_bets(self, current_bet)
-
-            
-
+                make_ai_bets(self, current_bet)     
             if player == self.last_raiser:
                 print('End of round!')
                 return
-
             # Move to the next player's turn
             self.collect_bets()
             self.next_turn()
@@ -229,6 +225,7 @@ class TexasHoldemGame:
         current_bet = self.big_blind
         last_raiser = None
         players_in_round = self.players
+        self.current_player_index = 0
         valid_options = ["fold", "check", "call", "raise"]
         while (len(players_in_round) > 1):
             current_player = players_in_round[self.current_player_index]
@@ -243,6 +240,8 @@ class TexasHoldemGame:
                     current_bet += raise_amount
                     current_player.make_bet(bet_choice, raise_amount)
                     last_raiser = current_player
+                    print(f"{current_player.name} {bet_choice}")
+                    break
 
             elif isinstance(current_player, UserPlayer):
                 bet_choice = current_player.make_bet_decision(valid_options)
@@ -254,13 +253,13 @@ class TexasHoldemGame:
 
             if bet_choice == "fold":
                 players_in_round.remove(current_player)
-                continue
+                
 
             if bet_choice == "call":
                 amount_to_call = current_bet - current_player.pot
                 current_player.make_bet(bet_choice, amount_to_call)
 
-            print(f"{current_player.name} {bet_choice}")
+            
             self.current_player_index += 1
         # Check if players have enough chips to call or raise
         for player in players_in_round:
