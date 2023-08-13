@@ -40,7 +40,7 @@ class TexasHoldemGame:
     def add_player(self, player):
         self.players.append(player)
 
-    def handle_call_action(player, amount_to_call):
+    def handle_call_action(self, player, amount_to_call):
         if (amount_to_call < player.balance):
             amount_to_call = player.balance
         player.make_bet(amount_to_call)
@@ -133,7 +133,7 @@ class TexasHoldemGame:
                     # Allow players to reset the community cards (optional)
                     self.reset_community_cards()
             elif isinstance(player, AIPlayer):
-                make_ai_bets(self, current_bet)     
+                self.make_ai_bets(current_bet)     
             if player == self.last_raiser:
                 print('End of round!')
                 return
@@ -237,7 +237,7 @@ class TexasHoldemGame:
             if isinstance(current_player, AIPlayer):
                 bet_choice = AIPlayer.make_bet_decision(current_bet)
                 if bet_choice == "raise":
-                    urrent_player.make_ai_bets()
+                    current_player.make_ai_bets()
                     current_bet += raise_amount
                     last_raiser = current_player
                     print(f"{current_player.name} {bet_choice}")
