@@ -237,11 +237,11 @@ class TexasHoldemGame:
             if isinstance(current_player, AIPlayer):
                 bet_choice = AIPlayer.make_bet_decision(current_bet)
                 if bet_choice == "raise":
+                    urrent_player.make_ai_bets()
                     current_bet += raise_amount
-                    current_player.make_bet(bet_choice, raise_amount)
                     last_raiser = current_player
                     print(f"{current_player.name} {bet_choice}")
-                    break
+                    continue
 
             elif isinstance(current_player, UserPlayer):
                 bet_choice = current_player.make_bet_decision(valid_options)
@@ -289,7 +289,7 @@ if __name__ == "__main__":
     ai_player2 = AIPlayer("AIPlayer2", 1000)
     ai_player3 = AIPlayer("AIPlayer3", 1000)
 
-    user_player = UserPlayer("{name}", 1000)
+    user_player = UserPlayer(f"User", 1000)
 
     # Add the AI players to the game
     game.add_player(ai_player1)
