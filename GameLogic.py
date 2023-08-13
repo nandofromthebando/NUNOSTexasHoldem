@@ -119,25 +119,23 @@ class TexasHoldemGame:
             print(self.get_game_info(player))
             if isinstance(player, UserPlayer):
                 bet_choice = input(f"Your turn, {player.name}. Enter 'fold', 'call', 'raise', or 'reset': ")
-            elif isinstance(player, AIPlayer):
-                bet_choice, raise_amount = player.make_bet_decision(valid_options)
-
-            if bet_choice == "fold":
-                # Handle the player's fold action
-                self.players_in_round.remove(player)
-            elif bet_choice == "call":
-                # Handle the player's call action
-                amount_to_call = self.current_bet - player.pot
-                self.handle_call_action(player, amount_to_call)
-            elif bet_choice == "raise":
-                if isinstance(player, AIPlayer):
-                    raise_amount = 0.1 * player.balance
-                else:
+                if bet_choice == "fold":
+                    # Handle the player's fold action
+                    self.players_in_round.remove(player)
+                elif bet_choice == "call":
+                    # Handle the player's call action
+                    amount_to_call = self.current_bet - player.pot
+                    self.handle_call_action(player, amount_to_call)
+                elif bet_choice == "raise":
                     raise_amount = player.get_raise_amount()
-                self.handle_raise_action(player, self.current_bet, raise_amount)
-            elif bet_choice == "reset":
-                # Allow players to reset the community cards (optional)
-                self.reset_community_cards()
+                    self.handle_raise_action(player, self.current_bet, raise_amount)
+                elif bet_choice == "reset":
+                    # Allow players to reset the community cards (optional)
+                    self.reset_community_cards()
+            elif isinstance(player, AIPlayer):
+                make_ai_bets(self, current_bet)
+
+            
 
             if player == self.last_raiser:
                 print('End of round!')
