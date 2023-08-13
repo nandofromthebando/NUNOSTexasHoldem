@@ -224,7 +224,7 @@ class TexasHoldemGame:
     def collect_bets(self):
         current_bet = self.big_blind
         last_raiser = None
-        players_in_round = self.players
+        players_in_round = self.players.copy()
         self.current_player_index = 0
         valid_options = ["fold", "check", "call", "raise"]
         while (len(players_in_round) > 1):
@@ -233,10 +233,10 @@ class TexasHoldemGame:
                 break
             if(current_player.folded):
                 players_in_round.remove(player)
-                break
+                continue
             if isinstance(current_player, AIPlayer):
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
-                current_player.make_bet(current_bet) 
+                current_player.make_bet(bet_choice, current_bet) 
             elif isinstance(current_player, UserPlayer):
                 bet_choice = current_player.make_bet_decision(valid_options)
                 if bet_choice == "raise":
@@ -255,6 +255,7 @@ class TexasHoldemGame:
 
             
             self.current_player_index += 1
+            self.current_player_index %= len(players_in_round)
             print(f"{current_player.name} {bet_choice}")
         # Check if players have enough chips to call or raise
         for player in players_in_round:
