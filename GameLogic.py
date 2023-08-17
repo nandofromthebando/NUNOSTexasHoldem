@@ -239,20 +239,7 @@ class TexasHoldemGame:
                 current_player.make_bet(bet_choice, current_bet) 
             elif isinstance(current_player, UserPlayer):
                 bet_choice = current_player.make_bet_decision(valid_options)
-                if bet_choice == "raise":
-                    raise_amount = current_player.get_raise_amount()
-                    current_bet += raise_amount
-                    current_player.make_bet(bet_choice, raise_amount)
-                    last_raiser = current_player
-
-            if bet_choice == "fold":
-                players_in_round.remove(current_player)
-                
-
-            if bet_choice == "call":
-                amount_to_call = current_bet - current_player.pot
-                current_player.make_bet(bet_choice, amount_to_call)
-
+                current_player.make_bet(bet_choice, current_bet) 
             
             self.current_player_index += 1
             self.current_player_index %= len(players_in_round)
@@ -266,6 +253,7 @@ class TexasHoldemGame:
         # Handle players who are all-in
         self.all_in_players()
         self.next_turn()
+        self.showdown()
         
     def next_turn(self):
         num_players = len(self.players)
