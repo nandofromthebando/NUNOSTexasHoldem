@@ -48,10 +48,11 @@ class TexasHoldemGame:
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
 
 
-    def make_ai_bets(self, current_bet):
+    def make_ai_bets(self, current_bet, choice):
         for player in self.players:
             if isinstance(player, AIPlayer):
-                bet_choice, raise_amount = player.make_bet_decision(current_bet)
+                bet_choice = choice
+                raise_amount = player.make_bet_decision(current_bet, player.hand)
 
                 if bet_choice == "fold":
                     self.handle_fold_action(player)
@@ -207,7 +208,7 @@ class TexasHoldemGame:
                 continue
             if isinstance(current_player, AIPlayer):
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
-                make_ai_bets(current_bet) 
+                self.make_ai_bets(current_bet, bet_choice) 
             elif isinstance(current_player, UserPlayer):
                 print(self.get_game_info(current_player))
                 bet_choice = current_player.make_bet_decision(valid_options)
