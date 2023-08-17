@@ -242,7 +242,6 @@ class TexasHoldemGame:
                 current_player.make_bet(bet_choice, current_bet) 
             
             self.current_player_index += 1
-            self.current_player_index %= len(players_in_round)
             print(f"{current_player.name} {bet_choice}")
         # Check if players have enough chips to call or raise
         for player in players_in_round:
@@ -252,8 +251,10 @@ class TexasHoldemGame:
 
         # Handle players who are all-in
         self.all_in_players()
-        self.next_turn()
+        print("End of Round!")
         self.showdown()
+        self.next_turn()
+
         
     def next_turn(self):
         num_players = len(self.players)
