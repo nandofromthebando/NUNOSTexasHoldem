@@ -112,35 +112,6 @@ class TexasHoldemGame:
         current_bet = raise_amount
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
 
-    def game_rounds(self):
-        while len(self.players_in_round) > 1:
-            player = self.players_in_round[self.current_player_index]
-           
-            print(self.get_game_info(player))
-            if isinstance(player, UserPlayer):
-                bet_choice = input(f"Your turn, {player.name}. Enter 'fold', 'call', 'raise', or 'reset': ")
-                if bet_choice == "fold":
-                    # Handle the player's fold action
-                    self.players_in_round.remove(player)
-                elif bet_choice == "call":
-                    # Handle the player's call action
-                    amount_to_call = self.current_bet - player.pot
-                    self.handle_call_action(player, amount_to_call)
-                elif bet_choice == "raise":
-                    raise_amount = player.get_raise_amount()
-                    self.handle_raise_action(player, self.current_bet, raise_amount)
-                elif bet_choice == "reset":
-                    # Allow players to reset the community cards (optional)
-                    self.reset_community_cards()
-            elif isinstance(player, AIPlayer):
-                self.make_ai_bets(current_bet)     
-            if player == self.last_raiser:
-                print('End of round!')
-                return
-            # Move to the next player's turn
-            self.collect_bets()
-            self.next_turn()
-
     
     def all_in_players(self):
         for player in self.players:
@@ -236,11 +207,21 @@ class TexasHoldemGame:
                 continue
             if isinstance(current_player, AIPlayer):
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
-                current_player.make_bet(bet_choice, current_bet) 
+                make_ai_bets(current_bet) 
             elif isinstance(current_player, UserPlayer):
+                print(self.get_game_info(current_player))
                 bet_choice = current_player.make_bet_decision(valid_options)
                 current_player.make_bet(bet_choice, current_bet) 
-            
+                if bet_choice == "fold":
+                    # Handle the player's fold action
+                    self.players_in_round.remove(current_player)
+                elif bet_choice == "call":
+                    # Handle the player's call action
+                    amount_to_call = self.current_bet - current_player.pot
+                    self.handle_call_action(current_player, amount_to_call)
+                elif bet_choice == "reset":
+                    # Allow players to reset the community cards (optional)
+                    self.reset_community_cards()   
             self.current_player_index += 1
             print(f"{current_player.name} {bet_choice}")
         # Check if players have enough chips to call or raise
