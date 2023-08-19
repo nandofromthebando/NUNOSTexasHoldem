@@ -49,21 +49,21 @@ class TexasHoldemGame:
 
 
     def make_ai_bets(self, current_bet, choice):
-        for player in self.players:
+        players_in_round = self.players.copy()
+        for player in players_in_round:
             if isinstance(player, AIPlayer):
                 bet_choice = choice
                 raise_amount = player.make_bet_decision(current_bet, player.hand)
 
                 if bet_choice == "fold":
-                    self.handle_fold_action(player)
-                    self.players_in_round.remove(player)
+                    players_in_round.remove(player)
                 elif bet_choice == "call":
                     amount_to_call = current_bet - player.pot
-                    self.handle_call_action(player, amount_to_call)
+                    handle_call_action(player, amount_to_call)
                 elif bet_choice == "raise":
-                    self.handle_raise_action(player, current_bet, raise_amount)
+                    handle_raise_action(player, current_bet, raise_amount)
                     current_bet += raise_amount
-                    self.last_raiser = player
+                    last_raiser = player
 
         self.collect_bets()
 
