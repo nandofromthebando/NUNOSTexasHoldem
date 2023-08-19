@@ -59,13 +59,11 @@ class TexasHoldemGame:
                     players_in_round.remove(player)
                 elif bet_choice == "call":
                     amount_to_call = current_bet - player.pot
-                    handle_call_action(player, amount_to_call)
+                    self.handle_call_action(player, amount_to_call)
                 elif bet_choice == "raise":
-                    handle_raise_action(player, current_bet, raise_amount)
+                    self.handle_raise_action(player, current_bet, raise_amount)
                     current_bet += raise_amount
                     last_raiser = player
-
-        self.collect_bets()
 
     def add_ai_player(self, name, initial_balance):
         ai_player = AIPlayer(name, initial_balance)
@@ -137,6 +135,7 @@ class TexasHoldemGame:
     def start_new_round(self):
         self.reset_game()
         self.deal_hole_cards()
+        self.current_player_index = 0
 
         if len(self.players) > 1:
             self.deal_community_cards(3)
@@ -199,6 +198,9 @@ class TexasHoldemGame:
         players_in_round = self.players.copy()
         self.current_player_index = 0
         valid_options = ["fold", "check", "call", "raise"]
+        if not self.players:
+            print("No players in the round.")
+            return
         while (len(players_in_round) > 1):
             current_player = players_in_round[self.current_player_index]
             if(current_player == last_raiser):
@@ -223,7 +225,7 @@ class TexasHoldemGame:
                 elif bet_choice == "reset":
                     # Allow players to reset the community cards (optional)
                     self.reset_community_cards()   
-            self.current_player_index += 1
+            self.current_player_index = (self.current_player_index + 1) % len(self.players)
             print(f"{current_player.name} {bet_choice}")
         # Check if players have enough chips to call or raise
         for player in players_in_round:

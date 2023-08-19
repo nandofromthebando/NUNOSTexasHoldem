@@ -53,11 +53,10 @@ class AIPlayer():
             for rank, count in ranks_count.items():
                 if count == 2:
                     return True
-
             return False
 
     def has_royal_flush(self, hand):
-            sorted_hand = sorted(hand, key=lambda card: AIPlayer.NUMBER.index(card.rank))
+            sorted_hand = sorted(hand, key=lambda card: AIPlayer.NUMBER.index(card.rank) if card.rank in AIPlayer.NUMBER else -1)
             consecutive_count = 1
             for i in range(1, len(sorted_hand)):
                 prev_rank = AIPlayer.NUMBER.index(sorted_hand[i-1].rank)
@@ -92,7 +91,7 @@ class AIPlayer():
                 return False
 
             # Then, we check if the flush has a straight
-            sorted_hand = sorted(hand, key=lambda card: AIPlayer.NUMBER.index(card.rank))
+            sorted_hand = sorted(hand, key=lambda card: AIPlayer.NUMBER.index(card.rank) if card.rank in AIPlayer.NUMBER else -1)
             consecutive_count = 1
             for i in range(1, len(sorted_hand)):
                 prev_rank = AIPlayer.NUMBER.index(sorted_hand[i - 1].rank)
@@ -141,7 +140,7 @@ class AIPlayer():
         return False
 
     def has_straight(self, hand):
-        sorted_hand = sorted(hand, key=lambda card: AIPlayer.NUMBER.index(card.rank))
+        sorted_hand = sorted(hand, key=lambda card: AIPlayer.NUMBER.index(card.rank) if card.rank in AIPlayer.NUMBER else -1)
         consecutive_count = 1
         for i in range(1, len(sorted_hand)):
             prev_rank = AIPlayer.NUMBER.index(sorted_hand[i - 1].rank)
