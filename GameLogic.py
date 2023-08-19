@@ -195,7 +195,6 @@ class TexasHoldemGame:
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
                 self.make_ai_bets(current_bet, bet_choice) 
             elif isinstance(current_player, UserPlayer):
-                print(self.get_game_info(current_player))
                 bet_choice = current_player.make_bet_decision(valid_options)
                 current_player.make_bet(bet_choice, current_bet) 
                 if bet_choice == "fold":
@@ -208,7 +207,10 @@ class TexasHoldemGame:
                     # Allow players to reset the community cards (optional)
                     self.reset_community_cards()   
             print(f"{current_player.name} {bet_choice}")
-            self.current_player_index = (self.current_player_index + 1) % len(self.players)
+            if(self.current_player_index != (len(players_in_round)-1)):
+                self.current_player_index = (self.current_player_index + 1) 
+            else:
+                break
         # Check if players have enough chips to call or raise
         for player in players_in_round:
             if (player.make_bet_decision != "fold"):
