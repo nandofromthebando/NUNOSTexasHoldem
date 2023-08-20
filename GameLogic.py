@@ -43,17 +43,18 @@ class TexasHoldemGame:
     def make_ai_bets(self, current_bet, choice):
         players_in_round = self.players.copy()
         for player in players_in_round:
-            if isinstance(player, AIPlayer):
-                bet_choice = choice
-                raise_amount = player.get_raise_amount()
-
-                if bet_choice == "fold":
-                    players_in_round.remove(player)
-                elif bet_choice == "call":
+            if isinstance(player, AIPlayer) and not player.folded:
+                bet_decision = player.make_bet_decision(current_bet, player.hand)
+                
+                if bet_decision == "fold":
+                    player.folded = True
+                elif bet_decision == "call":
                     amount_to_call = current_bet - player.pot
-                elif bet_choice == "raise":
+                    player.make_bet("call", amount_to_call)
+                elif bet_decision == "raise":
+                    raise_amount = player.get_raise_amount()
                     current_bet += raise_amount
-                    last_raiser = player
+                    player.make_bet("raise", current_bet)
 
     def add_ai_player(self, name, initial_balance):
         ai_player = AIPlayer(name, initial_balance)
@@ -189,7 +190,7 @@ class TexasHoldemGame:
             if(current_player == last_raiser):
                 break
             if(current_player.folded):
-                players_in_round.remove(player)
+                players_in_round.remove(current_player)
                 continue
             if isinstance(current_player, AIPlayer):
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
