@@ -140,6 +140,9 @@ class TexasHoldemGame:
     def showdown(self):
         active_players = [player for player in self.players if not player.folded]
 
+        for player in self.players:
+            self.pot  = self.pot + player.pot
+
         # If only one player is left or all others are all-in, they automatically win
         if len(active_players) == 1:
             winner = active_players[0]
@@ -214,6 +217,7 @@ class TexasHoldemGame:
          
 
         # Handle players who are all-in
+        
         self.all_in_players()
         print("End of Round!")
         self.showdown()
