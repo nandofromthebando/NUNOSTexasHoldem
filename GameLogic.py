@@ -227,6 +227,7 @@ class TexasHoldemGame:
         
     def next_turn(self):
         num_players = len(self.players)
+        self.current_player_index = 0
         while True:
             self.current_player_index = (self.current_player_index + 1) % num_players
             player = self.players[self.current_player_index]
