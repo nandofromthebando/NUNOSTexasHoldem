@@ -209,12 +209,14 @@ class TexasHoldemGame:
             if(self.current_player_index != (len(players_in_round)-1)):
                 self.current_player_index = (self.current_player_index + 1) 
             else:
-                break
-        # Check if players have enough chips to call or raise
+                break   
+
+            # Check if players have enough chips to call or raise
         for player in players_in_round:
-            if (player.make_bet_decision != "fold"):
+            if (player.folded != True):
                 amount_to_call = current_bet - player.pot
                 self.insufficient_funds(player, amount_to_call)
+                break   
 
         # Handle players who are all-in
         self.all_in_players()

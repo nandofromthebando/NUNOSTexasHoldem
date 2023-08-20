@@ -207,9 +207,6 @@ class AIPlayer():
     def get_raise_amount(self):
          return (.1*self.balance)
         
-    def handle_fold_action(self):
-        self.folded = True
-        self.clear_hand()
 
     def receive_card(self, card):
         self.hand.append(card)
