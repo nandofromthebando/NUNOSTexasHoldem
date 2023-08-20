@@ -105,7 +105,7 @@ class TexasHoldemGame:
         if (player.balance < current_bet):
             print(f"{player.name} doesn't have enough chips, going all in")
             self.pot += player.balance
-            player.pot += amount_to_call
+            player.pot += player.balance
             player.balance = 0
 
 
@@ -201,6 +201,7 @@ class TexasHoldemGame:
                 elif bet_choice == "call":
                     # Handle the player's call action
                     amount_to_call = current_bet - current_player.pot
+                    self.insufficient_funds(current_player, amount_to_call)
                 elif bet_choice == "reset":
                     # Allow players to reset the community cards (optional)
                     self.reset_community_cards()   
@@ -210,12 +211,7 @@ class TexasHoldemGame:
             else:
                 break   
 
-            # Check if players have enough chips to call or raise
-        for player in players_in_round:
-            if (player.folded != True):
-                amount_to_call = current_bet - player.pot
-                self.insufficient_funds(player, amount_to_call)
-                break   
+         
 
         # Handle players who are all-in
         self.all_in_players()
