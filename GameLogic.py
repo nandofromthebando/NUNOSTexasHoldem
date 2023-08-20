@@ -153,6 +153,7 @@ class TexasHoldemGame:
             player_hand = player.hand + self.community_cards
             best_ranking = player.get_best_hand_ranking()
             player_rankings[player] = best_ranking
+            print(player.get_best_hand_ranking)
 
         # Find the highest hand ranking among the active players
         highest_ranking = max(player_rankings.values())
@@ -189,9 +190,6 @@ class TexasHoldemGame:
             current_player = players_in_round[self.current_player_index]
             if(current_player == last_raiser):
                 break
-            if(current_player.folded):
-                players_in_round.remove(current_player)
-                continue
             if isinstance(current_player, AIPlayer):
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
                 self.make_ai_bets(current_bet, bet_choice) 
