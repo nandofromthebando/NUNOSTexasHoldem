@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import random
 from player import Player
 
 class AIPlayer():
@@ -222,4 +223,7 @@ class AIPlayer():
         elif hand_rank in ["Flush", "Straight", "Three of a Kind"]:
             return "call"
         else:
-            return "fold"
+            if random.random() < 0.2:  
+                return "fold"
+            else:
+                return "call"

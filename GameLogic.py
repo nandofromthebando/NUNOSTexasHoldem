@@ -134,7 +134,7 @@ class TexasHoldemGame:
             self.collect_bets()
 
         if len(self.players) >= 1:
-            self.showdown()
+            self.collect_bets()
             
 
     def showdown(self):
@@ -144,7 +144,7 @@ class TexasHoldemGame:
         if len(active_players) == 1:
             winner = active_players[0]
             winner.balance += self.pot
-            print(f"{winner.name} wins the pot with no showdown!")
+            print(f"{winner.name} wins { self.pot} chips, with no showdown!")
             return
 
         # Evaluate hands and determine the best hand ranking for each active player
@@ -164,7 +164,6 @@ class TexasHoldemGame:
         # Distribute the pot among the winners
         pot_per_winner = self.pot // len(winners)
         remaining_chips = self.pot % len(winners)
-
         for winner in winners:
             winner.balance += pot_per_winner
             if remaining_chips > 0:
