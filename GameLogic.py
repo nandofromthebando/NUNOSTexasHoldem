@@ -156,8 +156,7 @@ class TexasHoldemGame:
             player_hand = player.hand + self.community_cards
             best_ranking = player.get_best_hand_ranking()
             player_rankings[player] = best_ranking
-            print(player.get_best_hand_ranking)
-
+            print(f"{player.name} best hand ranking: {best_ranking}")
         # Find the highest hand ranking among the active players
         highest_ranking = max(player_rankings.values())
 
