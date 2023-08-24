@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import random
+import curses
+from random import randint
 from AIPlayers import AIPlayer
 from player import Player, UserPlayer
 
@@ -239,6 +240,16 @@ class TexasHoldemGame:
 
 if __name__ == "__main__":
     # Create a new game instance
+
+
+    #setup window
+    curses.initscr()
+    win = curses.newwin(20, 60, 0, 0) 
+    win.keypad(1)
+    curses.noecho()
+    curses.curs_set(0)
+    win.border(0)
+    win.nodelay(1) #-1
     game = TexasHoldemGame()
 
     # Create AI players with desired names and initial balances
