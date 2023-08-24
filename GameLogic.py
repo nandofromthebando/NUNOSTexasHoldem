@@ -137,8 +137,7 @@ class TexasHoldemGame:
 
         if len(self.players) >= 1:
             self.showdown()
-            for player in self.players:
-                print(f"End of Game! You win {player.name}!\nYour balance is: {player.balance}")
+           
                 
 
     def showdown(self):
@@ -199,6 +198,7 @@ class TexasHoldemGame:
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
                 self.make_ai_bets(current_bet, bet_choice) 
             elif isinstance(current_player, UserPlayer):
+                print(f"Current Bet to call: {current_bet} chips \nYour Current Balance {current_player.balance}")
                 bet_choice = current_player.make_bet_decision(valid_options)
                 current_player.make_bet(bet_choice, current_bet) 
                 if bet_choice == "fold":
