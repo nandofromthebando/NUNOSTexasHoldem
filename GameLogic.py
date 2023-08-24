@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import curses
-from random import randint
+import random 
 from AIPlayers import AIPlayer
 from player import Player, UserPlayer
 
@@ -240,7 +240,6 @@ class TexasHoldemGame:
 
 if __name__ == "__main__":
     # Create a new game instance
-
 
     #setup window
     curses.initscr()
