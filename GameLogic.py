@@ -76,6 +76,8 @@ class TexasHoldemGame:
     def reset_round(self):
         # Clear the community cards at the beginning of each round
         self.clear_community_cards()
+        for player in self.players:
+                player.folded = False
 
     def reset_community_cards(self):
         print("Resetting community cards...")
@@ -134,13 +136,15 @@ class TexasHoldemGame:
             self.collect_bets()
 
         if len(self.players) >= 1:
-            self.collect_bets()
-            
+            self.showdown()
+            for player in self.players:
+                print(f"End of Game! You win {player.name}!\nYour balance is: {player.balance}")
+                
 
     def showdown(self):
         active_players = [player for player in self.players if not player.folded]
 
-        for player in self.players:
+        for player in active_players:
             self.pot  = self.pot + player.pot
 
         # If only one player is left or all others are all-in, they automatically win
@@ -191,7 +195,7 @@ class TexasHoldemGame:
             current_player = players_in_round[self.current_player_index]
             if(current_player == last_raiser):
                 break
-            if isinstance(current_player, AIPlayer):
+            if isinstance(current_player, AIPlayer) and not current_player.folded:
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
                 self.make_ai_bets(current_bet, bet_choice) 
             elif isinstance(current_player, UserPlayer):
@@ -255,5 +259,5 @@ if __name__ == "__main__":
     # Start the game
     while len(game.players) > 1:
         game.start_new_round()
-
+        game.players = [player for player in game.players if player.balance > 0] # removes players who ae all out of chips
     # At this point, the game has ended, and there is a winner.
