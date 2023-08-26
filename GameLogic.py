@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import curses
+from blessed import Terminal
 import random 
 from AIPlayers import AIPlayer
 from player import Player, UserPlayer
@@ -7,7 +7,7 @@ from player import Player, UserPlayer
 # Define constants for card ranks and suits
 NUMBER = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-
+term = Terminal()
 class Card:
     def __init__(self, rank, suit):
         self.rank = rank
@@ -15,6 +15,22 @@ class Card:
 
     def __str__(self):
         return f"{self.rank} of {self.suit}"
+
+    def display_card(rank, suit):
+        # Visual for more attractive inerface
+        suit_symbols = {'Hearts': '\u2665', 'Diamonds': '\u2666', 'Clubs': '\u2663', 'Spades': '\u2660'}
+        card = f"""
+        ┌─────────┐
+        │ {rank:<2}      │
+        │         │
+        │    {suit}    │
+        │         │                       
+        │      {rank:>2} │
+        └─────────┘
+        """
+        return card
+
+    print(display_card(rank, suit))
 
 class Deck:
     def __init__(self):
@@ -67,10 +83,17 @@ class TexasHoldemGame:
                 card = self.deck.deal()
                 if card:
                     player.receive_card(card)
+        
         # After dealing, display each player's hole cards
         user_player = [player for player in self.players if isinstance(player, UserPlayer)][0]
-        print(f"Your Hole Cards: {', '.join(str(card) for card in user_player.hand)}")
+        with term.location(0, term.height - 4):  # Adjust vertical position as needed
+            print("Your Hole Cards:")
+            for card in user_player.hand:
+                print(display_card(card.rank, card.suit))
 
+        # Move the cursor to the next line after displaying the hole cards
+        with term.location(0, term.height - 2):  # Adjust vertical position as needed
+            pass
     def clear_community_cards(self):
         self.community_cards = []
     
@@ -241,14 +264,7 @@ class TexasHoldemGame:
 if __name__ == "__main__":
     # Create a new game instance
 
-    #setup window
-    curses.initscr()
-    win = curses.newwin(20, 60, 0, 0) 
-    win.keypad(1)
-    curses.noecho()
-    curses.curs_set(0)
-    win.border(0)
-    win.nodelay(1) #-1
+
     game = TexasHoldemGame()
 
     # Create AI players with desired names and initial balances
@@ -265,7 +281,7 @@ if __name__ == "__main__":
     game.add_player(user_player)
 
 
-
+    print(term.bold('Welcome to Texas Hold\'em Poker!'))
     # Start the game
     while len(game.players) > 1:
         game.start_new_round()

@@ -2,7 +2,7 @@
 # Define constants for card ranks and suits
 NUMBER = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-
+from blessed import Terminal
 class Player:
     def __init__(self, name, balance):
         self.name = name
@@ -25,31 +25,35 @@ class Player:
     @staticmethod
     def get_player_input():
         # Prompt the player for input
-        decision = input("Enter your betting decision (fold/call/raise): ").strip().lower()
+        with term.location(0, term.height - 1):
+            print('Commands: [F]old, [C]heck, [R]aise')
 
+        decision = term.inkey()
         # Validate the input (optional)
-        valid_options = ["fold", "call", "raise"]
-        while decision not in valid_options:
-            print("Invalid input. Please enter 'fold', 'call', or 'raise'.")
-            decision = input("Enter your betting decision: ").strip().lower()
+        valid_options = ["f", "c", "r"]
+        while decision.lower() not in valid_options:
+            with term.location(0, term.height - 2):
+                print("Invalid input. Please enter 'f' for fold, 'c' for call, or 'r' for raise.")
+                decision = term.inkey()
 
-        return decision
+        return decision.lower()
 
         
 
     def make_bet_decision(self):
         decision = Player.get_player_input()
-        valid_options = ["fold", "call", "raise"]
+        valid_options = ["f", "c", "r"]
+
         # Check the player's decision and act accordingly
-        if (decision == "fold"):
+        if decision == "f":
             return "fold"
-        elif (decision == "call"):
+        elif decision == "c":
             return "call"
-        elif (decision == "raise"):
+        elif decision == "r":
             raise_amount = self.get_raise_amount()
             return "raise", raise_amount
         else:
-            print("Invalid input. Please enter 'fold', 'call', or 'raise'.")
+            print("Invalid input. Please enter 'f' for fold, 'c' for call, or 'r' for raise.")
 
     def current_bet(self):
         while True:
