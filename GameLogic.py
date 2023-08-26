@@ -30,7 +30,6 @@ class Card:
         """
         return card
 
-    print(display_card(rank, suit))
 
 class Deck:
     def __init__(self):
@@ -89,13 +88,13 @@ class TexasHoldemGame:
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
             print("Your Hole Cards:")
             for card in user_player.hand:
-                print(display_card(card.rank, card.suit))
+                rank = card.rank
+                suit = card.suit
+                print(Card.display_card(rank, suit))
 
         # Move the cursor to the next line after displaying the hole cards
         with term.location(0, term.height - 2):  # Adjust vertical position as needed
             pass
-    def clear_community_cards(self):
-        self.community_cards = []
     
     def reset_round(self):
         # Clear the community cards at the beginning of each round
