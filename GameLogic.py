@@ -23,7 +23,7 @@ class Card:
         ┌─────────┐
         │ {rank:<2}      │
         │         │
-        │    {suit}    │
+        │  {suit} │
         │         │                       
         │      {rank:>2} │
         └─────────┘
@@ -85,7 +85,7 @@ class TexasHoldemGame:
         
         # After dealing, display each player's hole cards
         user_player = [player for player in self.players if isinstance(player, UserPlayer)][0]
-        with term.location(0, term.height - 4):  # Adjust vertical position as needed
+        with term.location(0, term.height - 6):  # Adjust vertical position as needed
             print("Your Hole Cards:")
             for card in user_player.hand:
                 rank = card.rank
@@ -113,7 +113,12 @@ class TexasHoldemGame:
             card = self.deck.deal()
             if card:
                 self.community_cards.append(card)
-        print(f"Community Cards: {', '.join(str(card) for card in self.community_cards)}")
+        with term.location(0, term.height - 6):  # Adjust vertical position as needed
+            print("Your Hole Cards:")
+            for card in user_player.hand:
+                rank = card.rank
+                suit = card.suit
+                print(Card.display_card(rank, suit))
 
 
     def get_game_info(self, player):
@@ -224,14 +229,14 @@ class TexasHoldemGame:
                 print(f"Current Bet to call: {current_bet} chips \nYour Current Balance {current_player.balance}")
                 bet_choice = current_player.make_bet_decision(valid_options)
                 current_player.make_bet(bet_choice, current_bet) 
-                if bet_choice == "fold":
+                if bet_choice == "f":
                     # Handle the player's fold action
                     self.players_in_round.remove(current_player)
-                elif bet_choice == "call":
+                elif bet_choice == "c":
                     # Handle the player's call action
                     amount_to_call = current_bet - current_player.pot
                     self.insufficient_funds(current_player, amount_to_call)
-                elif bet_choice == "reset":
+                elif bet_choice == "r":
                     # Allow players to reset the community cards (optional)
                     self.reset_community_cards()   
             print(f"{current_player.name} {bet_choice}")
