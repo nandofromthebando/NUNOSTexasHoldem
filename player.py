@@ -271,33 +271,38 @@ class UserPlayer(Player):
     def recieve_hand(self, cards):
         self.hand = cards
 
-    def make_bet_decision(self, valid_options):
+    @staticmethod
+    def get_player_input():
+        # Prompt the player for input
+        with term.location(0, term.height - 1):
+            print('Commands: [F]old, [C]heck, [R]aise')
 
+        decision = term.inkey()
+        # Validate the input (optional)
+        valid_options = ["f", "c", "r"]
+        while decision.lower() not in valid_options:
+            with term.location(0, term.height - 2):
+                print("Invalid input. Please enter 'f' for fold, 'c' for call, or 'r' for raise.")
+                decision = term.inkey()
 
-        while True:
-            bet_input = input("Enter your bet decision (fold, check, call, raise): ").lower()
+        return decision.lower()
 
-            if bet_input == "fold":
-                print("Player folded")
-                return 0  # Folding, so bet amount is 0.
-            elif bet_input in ["check", "call"]:
-                print("Player called")
-                return "call"  # Check or call, so bet the minimum valid amount.
-            elif bet_input == "raise":
-                try:
-                    # Prompt the user for the raise amount
-                    raise_amount = int(input("Enter the amount you want to raise: "))
+        
 
-                    # Check if the entered raise_amount is valid and within the valid_options
-                    if raise_amount >= 1:
-                        print(f"Player raised {raise_amount} chips")
-                        return raise_amount
-                    else:
-                        print("Invalid raise amount. Please enter a valid amount greater than or equal to the minimum raise.")
-                except ValueError:
-                    print("Invalid input. Please enter a valid number.")
-            else:
-                print("Invalid bet decision. Please enter a valid decision (fold, check, call, raise).")
+    def make_bet_decision(self):
+        decision = Player.get_player_input()
+        valid_options = ["f", "c", "r"]
+
+        # Check the player's decision and act accordingly
+        if decision == "f":
+            return "fold"
+        elif decision == "c":
+            return "call"
+        elif decision == "r":
+            raise_amount = self.get_raise_amount()
+            return "raise", raise_amount
+        else:
+            print("Invalid input. Please enter 'f' for fold, 'c' for call, or 'r' for raise.")
 
 
     def clear_hand(self):

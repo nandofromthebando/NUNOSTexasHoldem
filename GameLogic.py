@@ -214,7 +214,7 @@ class TexasHoldemGame:
         last_raiser = None
         players_in_round = self.players.copy()
         self.current_player_index = 0
-        valid_options = ["fold", "check", "call", "raise"]
+        
         if not self.players:
             print("No players in the round.")
             return
@@ -227,7 +227,7 @@ class TexasHoldemGame:
                 self.make_ai_bets(current_bet, bet_choice) 
             elif isinstance(current_player, UserPlayer):
                 print(f"Current Bet to call: {current_bet} chips \nYour Current Balance {current_player.balance}")
-                bet_choice = current_player.make_bet_decision(valid_options)
+                bet_choice = current_player.make_bet_decision()
                 current_player.make_bet(bet_choice, current_bet) 
                 if bet_choice == "f":
                     # Handle the player's fold action
