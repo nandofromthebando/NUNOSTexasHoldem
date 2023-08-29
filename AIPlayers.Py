@@ -96,7 +96,7 @@ class AIPlayer():
             consecutive_count = 1
             for i in range(1, len(sorted_hand)):
                 prev_rank = AIPlayer.NUMBER.index(sorted_hand[i - 1].rank)
-                current_rank = NUMBER.index(sorted_hand[i].rank)
+                current_rank = AIPlayer.NUMBER.index(sorted_hand[i].rank)
 
                 # If the current card has the same suit as the flush suit and has a consecutive rank
                 if sorted_hand[i].suit == flush_suit and current_rank == prev_rank + 1:
