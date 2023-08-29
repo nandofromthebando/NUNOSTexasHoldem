@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from blessed import Terminal
 import random 
+import sys
+sys.path.append('/path/to/directory')
 from AIPlayers import AIPlayer
 from player import Player, UserPlayer
 
