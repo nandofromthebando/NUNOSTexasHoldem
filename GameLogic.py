@@ -87,7 +87,7 @@ class TexasHoldemGame:
         
         # After dealing, display each player's hole cards
         user_player = [player for player in self.players if isinstance(player, UserPlayer)][0]
-        with term.location(0, term.height - 6):  # Adjust vertical position as needed
+        with term.location(0, term.height - 10):  # Adjust vertical position as needed
             print("Your Hole Cards:")
             for card in user_player.hand:
                 rank = card.rank
@@ -95,7 +95,7 @@ class TexasHoldemGame:
                 print(Card.display_card(rank, suit))
 
         # Move the cursor to the next line after displaying the hole cards
-        with term.location(0, term.height - 2):  # Adjust vertical position as needed
+        with term.location(0, term.height - 4):  # Adjust vertical position as needed
             pass
     
     def reset_round(self):
@@ -115,12 +115,16 @@ class TexasHoldemGame:
             card = self.deck.deal()
             if card:
                 self.community_cards.append(card)
-        with term.location(0, term.height - 6):  # Adjust vertical position as needed
-            print("Your Hole Cards:")
+        with term.location(0, term.height - 10):  # Adjust vertical position as needed
+            print("Community Cards:")
             for card in user_player.hand:
                 rank = card.rank
                 suit = card.suit
                 print(Card.display_card(rank, suit))
+
+        # Move the cursor to the next line after displaying the hole cards
+        with term.location(0, term.height - 4):  # Adjust vertical position as needed
+            pass
 
 
     def get_game_info(self, player):
