@@ -116,9 +116,9 @@ class TexasHoldemGame:
             if card:
                 self.community_cards.append(card)
         with term.location(0, term.height - 10):  # Adjust vertical position as needed
-            print("Your Hole Cards:")
-            print(Card.display_card(user_player.hand[0].rank, user_player.hand[0].suit), end=" ")
-            print(Card.display_card(user_player.hand[1].rank, user_player.hand[1].suit))
+            print("Your Community Cards:")
+            print(Card.display_card(self.community_cards[0].rank, self.community_cards[0].suit), end=" ")
+            print(Card.display_card(self.community_cards[1].rank, self.community_cards[1].suit))
         # Move the cursor to the next line after displaying the hole cards
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
             pass
@@ -218,11 +218,17 @@ class TexasHoldemGame:
         players_in_round = self.players.copy()
         self.current_player_index = 0
         
+        current_player = players_in_round[self.current_player_index]
+        current_player.folded = False
         if not self.players:
             print("No players in the round.")
             return
         while (len(players_in_round) > 1):
-            current_player = players_in_round[self.current_player_index]
+            if current_player.folded == True:
+                # Skip players who have already folded
+                self.next_turn()
+                continue
+            
             if(current_player == last_raiser):
                 break
             if isinstance(current_player, AIPlayer) and not current_player.folded:
@@ -235,6 +241,7 @@ class TexasHoldemGame:
                 if bet_choice == "fold":
                     # Handle the player's fold action
                     self.players_in_round.remove(current_player)
+                    current_player.folded = True
                 elif bet_choice == "call":
                     # Handle the player's call action
                     amount_to_call = current_bet - current_player.pot
