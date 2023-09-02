@@ -3,6 +3,7 @@
 NUMBER = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
 from blessed import Terminal
+import curses
 term = Terminal()
 class Player:
     def __init__(self, name, balance):
@@ -53,8 +54,7 @@ class Player:
         elif decision == "r":
             raise_amount = self.get_raise_amount()
             return "raise", raise_amount
-        else:
-            print("Invalid input. Please enter 'f' for fold, 'c' for call, or 'r' for raise.")
+
 
     def current_bet(self):
         while True:
@@ -267,7 +267,6 @@ class UserPlayer(Player):
         self.pot = 0
         self.folded = False
         self.community_cards = []
-        valid_options = ["fold", "call", "raise"]
 
     def recieve_hand(self, cards):
         self.hand = cards
@@ -302,8 +301,7 @@ class UserPlayer(Player):
         elif decision == "r":
             raise_amount = self.get_raise_amount()
             return "raise", raise_amount
-        else:
-            print("Invalid input. Please enter 'f' for fold, 'c' for call, or 'r' for raise.")
+
 
 
     def clear_hand(self):

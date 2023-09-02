@@ -88,16 +88,20 @@ class TexasHoldemGame:
 
         # After dealing, display each player's hole cards
         user_player = [player for player in self.players if isinstance(player, UserPlayer)][0]
-        with term.location(0, term.height - 10):  # Adjust vertical position as needed
+        with term.location(0, term.height - 4):  # Adjust vertical position as needed
             print("Your Hole Cards:")
             print(Card.display_card(user_player.hand[0].rank, user_player.hand[0].suit), end=" ")
             print(Card.display_card(user_player.hand[1].rank, user_player.hand[1].suit))
+            print()
 
         # Move the cursor to the next line after displaying the hole cards
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
             pass
 
-    
+    def clear_screen(self):
+        print(term.clear)
+
+
     def reset_round(self):
         # Clear the community cards at the beginning of each round
         self.clear_community_cards()
@@ -119,6 +123,7 @@ class TexasHoldemGame:
             print("Your Community Cards:")
             print(Card.display_card(self.community_cards[0].rank, self.community_cards[0].suit), end=" ")
             print(Card.display_card(self.community_cards[1].rank, self.community_cards[1].suit))
+            print()
         # Move the cursor to the next line after displaying the hole cards
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
             pass
@@ -217,52 +222,51 @@ class TexasHoldemGame:
         last_raiser = None
         players_in_round = self.players.copy()
         self.current_player_index = 0
-        
-        current_player = players_in_round[self.current_player_index]
-        current_player.folded = False
+
         if not self.players:
             print("No players in the round.")
             return
-        while (len(players_in_round) > 1):
-            if current_player.folded == True:
+
+        while len(players_in_round) > 1:
+            current_player = players_in_round[self.current_player_index]
+
+            if current_player.folded:
                 # Skip players who have already folded
                 self.next_turn()
                 continue
-            
-            if(current_player == last_raiser):
+
+            if current_player == last_raiser:
                 break
-            if isinstance(current_player, AIPlayer) and not current_player.folded:
+
+            if isinstance(current_player, AIPlayer):
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
-                self.make_ai_bets(current_bet, bet_choice) 
+                self.make_ai_bets(current_bet, bet_choice)
             elif isinstance(current_player, UserPlayer):
-                print(f"Current Bet to call: {current_bet} chips \nYour Current Balance {current_player.balance}")
+                print(f"Current Bet to call: {current_bet} chips\nYour Current Balance: {current_player.balance}")
                 bet_choice = current_player.make_bet_decision()
-                current_player.make_bet(bet_choice, current_bet) 
+                print()
+                current_player.make_bet(bet_choice, current_bet)
+
                 if bet_choice == "fold":
                     # Handle the player's fold action
                     self.players_in_round.remove(current_player)
-                    current_player.folded = True
                 elif bet_choice == "call":
                     # Handle the player's call action
                     amount_to_call = current_bet - current_player.pot
                     self.insufficient_funds(current_player, amount_to_call)
                 elif bet_choice == "raise":
                     # Allow players to reset the community cards (optional)
-                    self.reset_community_cards()   
-            print(f"{current_player.name} {bet_choice}")
-            if(self.current_player_index != (len(players_in_round)-1)):
-                self.current_player_index = (self.current_player_index + 1) 
-            else:
-                break   
+                    self.reset_community_cards()
 
-         
+            print(f"{current_player.name} {bet_choice}")
+
+            self.next_turn()
 
         # Handle players who are all-in
-        
         self.all_in_players()
         print("End of Round!")
         self.showdown()
-        self.next_turn()
+
 
         
     def next_turn(self):
