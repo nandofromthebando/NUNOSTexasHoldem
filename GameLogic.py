@@ -18,17 +18,18 @@ class Card:
     def __str__(self):
         return f"{self.rank} of {self.suit}"
 
+    @staticmethod
     def display_card(rank, suit):
-        # Visual for more attractive inerface
+        # Visual for a more attractive interface
         suit_symbols = {'Hearts': '\u2665', 'Diamonds': '\u2666', 'Clubs': '\u2663', 'Spades': '\u2660'}
         card = f"""
-        ┌─────────┐
-        │ {rank:<2}      │
-        │         │
-        │  {suit} │
-        │         │                       
-        │      {rank:>2} │
-        └─────────┘
+        ┌─────────┐   ┌─────────┐
+        │ {rank:<2}      │   │ {rank:<2}      │
+        │         │   │         │
+        │  {suit} │   │  {suit} │
+        │         │   │         │
+        │      {rank:>2} │   │      {rank:>2} │
+        └─────────┘   └─────────┘
         """
         return card
 
@@ -84,19 +85,18 @@ class TexasHoldemGame:
                 card = self.deck.deal()
                 if card:
                     player.receive_card(card)
-        
+
         # After dealing, display each player's hole cards
         user_player = [player for player in self.players if isinstance(player, UserPlayer)][0]
         with term.location(0, term.height - 10):  # Adjust vertical position as needed
             print("Your Hole Cards:")
-            for card in user_player.hand:
-                rank = card.rank
-                suit = card.suit
-                print(Card.display_card(rank, suit))
+            print(Card.display_card(user_player.hand[0].rank, user_player.hand[0].suit), end=" ")
+            print(Card.display_card(user_player.hand[1].rank, user_player.hand[1].suit))
 
         # Move the cursor to the next line after displaying the hole cards
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
             pass
+
     
     def reset_round(self):
         # Clear the community cards at the beginning of each round
@@ -116,12 +116,9 @@ class TexasHoldemGame:
             if card:
                 self.community_cards.append(card)
         with term.location(0, term.height - 10):  # Adjust vertical position as needed
-            print("Community Cards:")
-            for card in user_player.hand:
-                rank = card.rank
-                suit = card.suit
-                print(Card.display_card(rank, suit))
-
+            print("Your Hole Cards:")
+            print(Card.display_card(user_player.hand[0].rank, user_player.hand[0].suit), end=" ")
+            print(Card.display_card(user_player.hand[1].rank, user_player.hand[1].suit))
         # Move the cursor to the next line after displaying the hole cards
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
             pass
@@ -235,14 +232,14 @@ class TexasHoldemGame:
                 print(f"Current Bet to call: {current_bet} chips \nYour Current Balance {current_player.balance}")
                 bet_choice = current_player.make_bet_decision()
                 current_player.make_bet(bet_choice, current_bet) 
-                if bet_choice == "f":
+                if bet_choice == "fold":
                     # Handle the player's fold action
                     self.players_in_round.remove(current_player)
-                elif bet_choice == "c":
+                elif bet_choice == "call":
                     # Handle the player's call action
                     amount_to_call = current_bet - current_player.pot
                     self.insufficient_funds(current_player, amount_to_call)
-                elif bet_choice == "r":
+                elif bet_choice == "raise":
                     # Allow players to reset the community cards (optional)
                     self.reset_community_cards()   
             print(f"{current_player.name} {bet_choice}")

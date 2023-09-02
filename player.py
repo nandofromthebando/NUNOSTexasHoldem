@@ -70,12 +70,12 @@ class Player:
 
 
     def make_bet(self, decision, amount):
-        if (decision == "fold"):
+        if (decision == "f"):
             self.clear_hand()
-        elif (decision == "call"):
+        elif (decision == "c"):
             self.pot += amount
             self.balance -= amount
-        elif (decision == "raise"):
+        elif (decision == "r"):
             raise_amount = self.get_raise_amount()
             self.pot += amount + raise_amount 
             self.balance -= (amount + raise_amount)
