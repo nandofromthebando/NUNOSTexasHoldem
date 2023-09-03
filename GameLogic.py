@@ -241,7 +241,7 @@ class TexasHoldemGame:
             if isinstance(current_player, AIPlayer):
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
                 self.make_ai_bets(current_bet, bet_choice)
-            elif isinstance(current_player, UserPlayer):
+            if isinstance(current_player, UserPlayer) and not current_player.folded:
                 print(f"Current Bet to call: {current_bet} chips\nYour Current Balance: {current_player.balance}")
                 bet_choice = current_player.make_bet_decision()
                 print()
@@ -250,6 +250,7 @@ class TexasHoldemGame:
                 if bet_choice == "fold":
                     # Handle the player's fold action
                     self.players_in_round.remove(current_player)
+                    current_player.folded = True
                 elif bet_choice == "call":
                     # Handle the player's call action
                     amount_to_call = current_bet - current_player.pot
