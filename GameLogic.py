@@ -222,31 +222,27 @@ class TexasHoldemGame:
         last_raiser = None
         players_in_round = self.players.copy()
         self.current_player_index = 0
-
+        
+        current_player = players_in_round[self.current_player_index]
+        current_player.folded = False
         if not self.players:
             print("No players in the round.")
             return
-
-        while len(players_in_round) > 1:
-            current_player = players_in_round[self.current_player_index]
-
-            if current_player.folded:
+        while (len(players_in_round) > 1):
+            if current_player.folded == True:
                 # Skip players who have already folded
                 self.next_turn()
                 continue
-
-            if current_player == last_raiser:
+            
+            if(current_player == last_raiser):
                 break
-
-            if isinstance(current_player, AIPlayer):
+            if isinstance(current_player, AIPlayer) and not current_player.folded:
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
-                self.make_ai_bets(current_bet, bet_choice)
-            if isinstance(current_player, UserPlayer) and not current_player.folded:
-                print(f"Current Bet to call: {current_bet} chips\nYour Current Balance: {current_player.balance}")
+                self.make_ai_bets(current_bet, bet_choice) 
+            elif isinstance(current_player, UserPlayer):
+                print(f"Current Bet to call: {current_bet} chips \nYour Current Balance {current_player.balance}")
                 bet_choice = current_player.make_bet_decision()
-                print()
-                current_player.make_bet(bet_choice, current_bet)
-
+                current_player.make_bet(bet_choice, current_bet) 
                 if bet_choice == "fold":
                     # Handle the player's fold action
                     self.players_in_round.remove(current_player)
@@ -257,17 +253,27 @@ class TexasHoldemGame:
                     self.insufficient_funds(current_player, amount_to_call)
                 elif bet_choice == "raise":
                     # Allow players to reset the community cards (optional)
-                    self.reset_community_cards()
-
+                    self.reset_community_cards()   
             print(f"{current_player.name} {bet_choice}")
-
-            self.next_turn()
-
+            if(self.current_player_index != (len(players_in_round)-1)):
+                self.current_player_index = (self.current_player_index + 1) 
+            else:
+                break  
         # Handle players who are all-in
         self.all_in_players()
         print("End of Round!")
         self.showdown()
+        self.next_turn()
 
+        
+    def next_turn(self):
+        num_players = len(self.players)
+        self.current_player_index = 0
+        while True:
+            self.current_player_index = (self.current_player_index + 1) % num_players
+            player = self.players[self.current_player_index]
+            if not player.folded:
+                break
 
         
     def next_turn(self):
