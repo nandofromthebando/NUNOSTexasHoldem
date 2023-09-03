@@ -271,22 +271,6 @@ class UserPlayer(Player):
     def recieve_hand(self, cards):
         self.hand = cards
 
-    @staticmethod
-    def get_player_input():
-        # Prompt the player for input
-        with term.location(0, term.height - 1):
-            print('Commands: [F]old, [C]heck, [R]aise')
-
-        decision = term.inkey()
-        # Validate the input (optional)
-        valid_options = ["f", "c", "r"]
-        while decision.lower() not in valid_options:
-            with term.location(0, term.height - 2):
-                print("Invalid input. Please enter 'f' for fold, 'c' for call, or 'r' for raise.")
-                decision = term.inkey()
-
-        return decision.lower()
-
         
 
     def make_bet_decision(self):
