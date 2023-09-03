@@ -234,10 +234,16 @@ class TexasHoldemGame:
             if isinstance(current_player, AIPlayer) and not current_player.folded:
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
                 self.make_ai_bets(current_bet, bet_choice) 
+<<<<<<< HEAD
             elif isinstance(current_player, UserPlayer) and not current_player.folded:
                 print(f"Current Bet to call: {current_bet} chips\nYour Current Balance: {current_player.balance}")
                 bet_choice = current_player.make_bet_decision()
                 
+=======
+            elif isinstance(current_player, UserPlayer):
+                bet_choice = current_player.make_bet_decision(valid_options)
+                current_player.make_bet(bet_choice, current_bet) 
+>>>>>>> parent of 921c01c (Update GameLogic.py)
                 if bet_choice == "fold":
                     # Handle the player's fold action
                     self.players_in_round.remove(current_player)
