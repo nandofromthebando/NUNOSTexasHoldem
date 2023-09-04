@@ -241,7 +241,7 @@ class TexasHoldemGame:
                 print(f"Your Current Balance: {current_player.balance}")
                 print("Commands: [F]old, [C]heck, [R]aise")
                 bet_choice = current_player.make_bet_decision()
-                if bet_choice == "q":  # Check for Quit command
+                if bet_choice == "Q":  # Check for Quit command
                     print("You have quit the game.")
                     sys.exit()  # Exit the game gracefully
                 if bet_choice == "fold":
@@ -319,4 +319,5 @@ if __name__ == "__main__":
     while len(game.players) > 1:
         game.start_new_round()
         game.players = [player for player in game.players if player.balance > 0] # removes players who ae all out of chips
+    print("Thank you for playing Texas Hold'em Poker!")
     # At this point, the game has ended, and there is a winner.
