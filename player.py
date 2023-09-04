@@ -31,7 +31,7 @@ class Player:
                 print('Commands: [F]old, [C]heck, [R]aise')
             decision = term.inkey().lower()
             
-            if decision == 'f' or decision == 'c' or decision == 'r':
+            if decision == 'f' or decision == 'c' or decision == 'r' or decision == 'q':
                 return decision
 
         

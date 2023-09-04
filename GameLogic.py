@@ -241,9 +241,9 @@ class TexasHoldemGame:
                 print(f"Your Current Balance: {current_player.balance}")
                 print("Commands: [F]old, [C]heck, [R]aise")
                 bet_choice = current_player.make_bet_decision()
-                if bet_choice == "Q":  # Check for Quit command
+                if bet_choice == "q":  # Check for Quit command
                     print("You have quit the game.")
-                    sys.exit()  # Exit the game gracefully
+                    sys.exit() # Exit the game gracefully
                 if bet_choice == "fold":
                     # Handle the player's fold action
                     if current_player in self.players_in_round:
