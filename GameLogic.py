@@ -19,16 +19,15 @@ class Card:
         return f"{self.rank} of {self.suit}"
 
     @staticmethod
-    def display_card(rank, suit):
+    def display_card(card1, card2):
         # Visual for a more attractive interface
-        suit_symbols = {'Hearts': '\u2665', 'Diamonds': '\u2666', 'Clubs': '\u2663', 'Spades': '\u2660'}
         card = f"""
         ┌─────────┐   ┌─────────┐
-        │ {rank:<2}      │   │ {rank:<2}      │
+        │ {card1.rank:<2}      │   │ {card2.rank:<2}      │
         │         │   │         │
-        │  {suit} │   │  {suit} │
+        │  {card1.suit} │   │  {card2.suit} │
         │         │   │         │
-        │      {rank:>2} │   │      {rank:>2} │
+        │      {card1.rank:>2} │   │      {card2.rank:>2} │
         └─────────┘   └─────────┘
         """
         return card
@@ -89,16 +88,14 @@ class TexasHoldemGame:
         # After dealing, display each player's hole cards
         user_player = [player for player in self.players if isinstance(player, UserPlayer)][0]
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
-            print(term.clear)
             print("Your Hole Cards:")
-            print(Card.display_card(user_player.hand[0].rank, user_player.hand[0].suit))
-            print(Card.display_card(user_player.hand[1].rank, user_player.hand[1].suit))
+            card1, card2 = user_player.hand[0], user_player.hand[1]
+            print(Card.display_card(card1, card2))
             print()
 
         # Move the cursor to the next line after displaying the hole cards
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
             pass
-
     def clear_screen(self):
         print(term.clear)
 
@@ -122,13 +119,13 @@ class TexasHoldemGame:
                 self.community_cards.append(card)
         with term.location(0, term.height - 10):  # Adjust vertical position as needed
             print("Your Community Cards:")
-        for card in self.community_cards:
-            print(Card.display_card(card.rank, card.suit), end=" ")
-            print("\n")
-                # Move the cursor to the next line after displaying the hole cards
+            card_display = [Card.display_card(card1, card2) for card1, card2 in zip(self.community_cards[::2], self.community_cards[1::2])]
+            for display in card_display:
+                print(display)
+                print()
+        # Move the cursor to the next line after displaying the community cards
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
             pass
-
 
     def get_game_info(self, player):
         return (f"Pot: {self.pot}, Hand: {player.hand}, Community Cards: {self.community_cards}")
@@ -239,12 +236,14 @@ class TexasHoldemGame:
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
                 self.make_ai_bets(current_bet, bet_choice) 
             elif isinstance(current_player, UserPlayer) and not current_player.folded:
-                print(term.clear)
+               # print(term.clear)
                 print(f"Current Bet to call: {current_bet} chips")
                 print(f"Your Current Balance: {current_player.balance}")
                 print("Commands: [F]old, [C]heck, [R]aise")
                 bet_choice = current_player.make_bet_decision()
-                
+                if bet_choice == "q":  # Check for Quit command
+                    print("You have quit the game.")
+                    sys.exit()  # Exit the game gracefully
                 if bet_choice == "fold":
                     # Handle the player's fold action
                     if current_player in self.players_in_round:
@@ -290,13 +289,10 @@ if __name__ == "__main__":
 
 
     game = TexasHoldemGame()
-    print(term.clear)
     print(term.bold('Welcome to Texas Hold\'em Poker!'))
-    print(term.clear)
     print(term.bold("Waiting for Players.."))
     # Create AI players with desired names and initial balances
     ai_player1 = AIPlayer("AIPlayer1", 1000)
-    print(term.clear)
     print(term.bold("AIPlayer 1 added.."))
     with term.location(0, term.height - 1):  # Adjust vertical position as needed
         pass
