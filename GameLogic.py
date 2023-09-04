@@ -89,8 +89,9 @@ class TexasHoldemGame:
         # After dealing, display each player's hole cards
         user_player = [player for player in self.players if isinstance(player, UserPlayer)][0]
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
+            print(term.clear)
             print("Your Hole Cards:")
-            print(Card.display_card(user_player.hand[0].rank, user_player.hand[0].suit), end=" ")
+            print(Card.display_card(user_player.hand[0].rank, user_player.hand[0].suit))
             print(Card.display_card(user_player.hand[1].rank, user_player.hand[1].suit))
             print()
 
@@ -121,10 +122,10 @@ class TexasHoldemGame:
                 self.community_cards.append(card)
         with term.location(0, term.height - 10):  # Adjust vertical position as needed
             print("Your Community Cards:")
-            print(Card.display_card(self.community_cards[0].rank, self.community_cards[0].suit), end=" ")
-            print(Card.display_card(self.community_cards[1].rank, self.community_cards[1].suit))
-            print()
-        # Move the cursor to the next line after displaying the hole cards
+        for card in self.community_cards:
+            print(Card.display_card(card.rank, card.suit), end=" ")
+            print("\n")
+                # Move the cursor to the next line after displaying the hole cards
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
             pass
 
@@ -218,6 +219,7 @@ class TexasHoldemGame:
         if remaining_chips > 0:
             print(f"Remaining {remaining_chips} chips in the pot are not evenly divisible and go to a random winner.")
 
+
     def collect_bets(self):
         current_bet = self.big_blind
         last_raiser = None
@@ -237,7 +239,10 @@ class TexasHoldemGame:
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
                 self.make_ai_bets(current_bet, bet_choice) 
             elif isinstance(current_player, UserPlayer) and not current_player.folded:
-                print(f"Current Bet to call: {current_bet} chips\nYour Current Balance: {current_player.balance}")
+                print(term.clear)
+                print(f"Current Bet to call: {current_bet} chips")
+                print(f"Your Current Balance: {current_player.balance}")
+                print("Commands: [F]old, [C]heck, [R]aise")
                 bet_choice = current_player.make_bet_decision()
                 
                 if bet_choice == "fold":
@@ -285,11 +290,24 @@ if __name__ == "__main__":
 
 
     game = TexasHoldemGame()
-
+    print(term.clear)
+    print(term.bold('Welcome to Texas Hold\'em Poker!'))
+    print(term.clear)
+    print(term.bold("Waiting for Players.."))
     # Create AI players with desired names and initial balances
     ai_player1 = AIPlayer("AIPlayer1", 1000)
+    print(term.clear)
+    print(term.bold("AIPlayer 1 added.."))
+    with term.location(0, term.height - 1):  # Adjust vertical position as needed
+        pass
     ai_player2 = AIPlayer("AIPlayer2", 1000)
+    with term.location(0, term.height - 1):  # Adjust vertical position as needed
+        pass
+    print(term.bold("AIPlayer 1 added.."))
     ai_player3 = AIPlayer("AIPlayer3", 1000)
+    with term.location(0, term.height - 1):  # Adjust vertical position as needed
+        pass
+    print(term.bold("AIPlayer 1 added.."))
 
     user_player = UserPlayer(f"User", 1000)
 
@@ -300,7 +318,7 @@ if __name__ == "__main__":
     game.add_player(user_player)
 
 
-    print(term.bold('Welcome to Texas Hold\'em Poker!'))
+   
     # Start the game
     while len(game.players) > 1:
         game.start_new_round()
