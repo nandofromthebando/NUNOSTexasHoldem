@@ -223,10 +223,12 @@ class TexasHoldemGame:
         last_raiser = None
         players_in_round = self.players.copy()
         self.current_player_index = 0
-        
+
+
         while len(players_in_round) > 1:
             current_player = players_in_round[self.current_player_index]
             current_player.folded = False
+
             
             if current_player == last_raiser:
                 break
@@ -234,19 +236,14 @@ class TexasHoldemGame:
             if isinstance(current_player, AIPlayer) and not current_player.folded:
                 bet_choice = current_player.make_bet_decision(current_bet, current_player.hand)
                 self.make_ai_bets(current_bet, bet_choice) 
-<<<<<<< HEAD
             elif isinstance(current_player, UserPlayer) and not current_player.folded:
                 print(f"Current Bet to call: {current_bet} chips\nYour Current Balance: {current_player.balance}")
                 bet_choice = current_player.make_bet_decision()
                 
-=======
-            elif isinstance(current_player, UserPlayer):
-                bet_choice = current_player.make_bet_decision(valid_options)
-                current_player.make_bet(bet_choice, current_bet) 
->>>>>>> parent of 921c01c (Update GameLogic.py)
                 if bet_choice == "fold":
                     # Handle the player's fold action
-                    self.players_in_round.remove(current_player)
+                    if current_player in self.players_in_round:
+                        self.players_in_round.remove(current_player)
                     current_player.folded = True
                 elif bet_choice == "call":
                     # Handle the player's call action
@@ -260,7 +257,10 @@ class TexasHoldemGame:
             
             print(f"{current_player.name} {bet_choice}")
             
-            self.current_player_index = (self.current_player_index + 1) % len(players_in_round)
+            if(self.current_player_index != (len(players_in_round)-1)):
+                self.current_player_index = (self.current_player_index + 1) 
+            else:
+                break
         
         # Handle players who are all-in
         self.all_in_players()

@@ -26,26 +26,18 @@ class Player:
 
     @staticmethod
     def get_player_input():
-        # Prompt the player for input
-        with term.location(0, term.height - 1):
-            print('Commands: [F]old, [C]heck, [R]aise')
-
-        decision = term.inkey()
-        # Validate the input (optional)
-        valid_options = ["f", "c", "r"]
-        while decision.lower() not in valid_options:
-            with term.location(0, term.height - 2):
-                print("Invalid input. Please enter 'f' for fold, 'c' for call, or 'r' for raise.")
-                decision = term.inkey()
-
-        return decision.lower()
+        while True:
+            with term.location(0, term.height - 1):
+                print('Commands: [F]old, [C]heck, [R]aise')
+            decision = term.inkey().lower()
+            
+            if decision == 'f' or decision == 'c' or decision == 'r':
+                return decision
 
         
 
     def make_bet_decision(self):
         decision = Player.get_player_input()
-        valid_options = ["f", "c", "r"]
-
         # Check the player's decision and act accordingly
         if decision == "f":
             return "fold"
@@ -53,7 +45,7 @@ class Player:
             return "call"
         elif decision == "r":
             raise_amount = self.get_raise_amount()
-            return "raise", raise_amount
+            return ("raise", raise_amount)
 
 
     def current_bet(self):
@@ -275,7 +267,6 @@ class UserPlayer(Player):
 
     def make_bet_decision(self):
         decision = Player.get_player_input()
-        valid_options = ["f", "c", "r"]
 
         # Check the player's decision and act accordingly
         if decision == "f":
@@ -284,7 +275,7 @@ class UserPlayer(Player):
             return "call"
         elif decision == "r":
             raise_amount = self.get_raise_amount()
-            return "raise", raise_amount
+            return ("raise", raise_amount)
 
 
 
