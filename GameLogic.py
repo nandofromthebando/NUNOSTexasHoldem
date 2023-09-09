@@ -87,11 +87,10 @@ class TexasHoldemGame:
 
         # After dealing, display each player's hole cards
         user_player = [player for player in self.players if isinstance(player, UserPlayer)][0]
-        with term.location(0, term.height - 4):  # Adjust vertical position as needed
-            print("Your Hole Cards:")
-            card1, card2 = user_player.hand[0], user_player.hand[1]
-            print(Card.display_card(card1, card2))
-            print()
+        print("Your Hole Cards:")
+        card1, card2 = user_player.hand[0], user_player.hand[1]
+        print(Card.display_card(card1, card2))
+        print()
 
         # Move the cursor to the next line after displaying the hole cards
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
@@ -117,12 +116,11 @@ class TexasHoldemGame:
             card = self.deck.deal()
             if card:
                 self.community_cards.append(card)
-        with term.location(0, term.height - 10):  # Adjust vertical position as needed
-            print("Your Community Cards:")
-            card_display = [Card.display_card(card1, card2) for card1, card2 in zip(self.community_cards[::2], self.community_cards[1::2])]
-            for display in card_display:
-                print(display)
-                print()
+        print("Your Community Cards:")
+        card_display = [Card.display_card(card1, card2) for card1, card2 in zip(self.community_cards[::2], self.community_cards[1::2])]
+        for display in card_display:
+            print(display)
+            print()
         # Move the cursor to the next line after displaying the community cards
         with term.location(0, term.height - 4):  # Adjust vertical position as needed
             pass
@@ -223,7 +221,8 @@ class TexasHoldemGame:
         players_in_round = self.players.copy()
         self.current_player_index = 0
 
-
+        with term.location(0, term.height - 4):  # Adjust vertical position as needed
+            pass
         while len(players_in_round) > 1:
             current_player = players_in_round[self.current_player_index]
             current_player.folded = False
